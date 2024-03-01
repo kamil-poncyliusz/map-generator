@@ -12,6 +12,7 @@ interface CheckboxSettingRowProps extends SettingRowProps {
 interface NumberSettingRowProps extends SettingRowProps {
   value: number;
   changeHandler: (newValue: number) => void;
+  validator: (newValue: number) => boolean;
 }
 
 interface ButtonSettingRowProps extends SettingRowProps {
@@ -39,24 +40,61 @@ export function NumberSettingRow({
   labelText,
   value,
   changeHandler,
+  validator,
 }: NumberSettingRowProps) {
   const [inputValue, setInputValue] = useState(value);
-  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+  function applyChange(
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLInputElement>
+  ) {
     const target = e.target as HTMLInputElement;
     const newValue = parseInt(target.value);
-    if (typeof newValue === "number") changeHandler(newValue);
-  };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (validator(newValue)) changeHandler(newValue);
+  }
+  function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
-    setInputValue(parseInt(target.value));
-  };
+    const newValue = parseInt(target.value);
+    setInputValue(newValue);
+    if (validator(newValue)) target.classList.remove("is-invalid");
+    else target.classList.add("is-invalid");
+  }
+  function increaseValue(e: React.KeyboardEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const oldValue = parseInt(e.currentTarget.value);
+    for (let i = 1; i < 1000; i++) {
+      const newValue = oldValue + i;
+      if (validator(newValue)) {
+        setInputValue(newValue);
+        break;
+      }
+    }
+  }
+  function decreaseValue(e: React.KeyboardEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const oldValue = parseInt(e.currentTarget.value);
+    for (let i = 1; i < 1000; i++) {
+      const newValue = oldValue - i;
+      if (validator(newValue)) {
+        setInputValue(newValue);
+        break;
+      }
+    }
+  }
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    const key = e.key;
+    if (key === "Enter") applyChange(e);
+    if (key === "ArrowUp") increaseValue(e);
+    if (key === "ArrowDown") decreaseValue(e);
+  }
   return (
     <div className="settings-row">
       <label>{labelText}</label>
       <input
         type="number"
-        onBlur={handleBlur}
-        onChange={handleChange}
+        onBlur={applyChange}
+        onInput={handleInput}
+        onKeyDown={handleKeyDown}
         value={inputValue}
       />
     </div>

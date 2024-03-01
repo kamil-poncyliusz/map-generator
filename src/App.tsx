@@ -19,12 +19,13 @@ const defaultSettings: Settings = {
 
 function App() {
   const [settings, setSettings] = useState({ ...defaultSettings });
-  const changeSetting = (settingName: string) => {
+  const changeSetting = (settingName: keyof Settings) => {
     return (newValue: number) => {
-      setSettings((previousValue) => ({
-        ...previousValue,
-        [settingName]: newValue,
-      }));
+      if (settings[settingName] !== newValue)
+        setSettings((previousValue) => ({
+          ...previousValue,
+          [settingName]: newValue,
+        }));
     };
   };
   return (

@@ -69,3 +69,6 @@
 #map-preview-controls button:active {
   background-color: lightblue;
 }
+.is-invalid {
+  outline: 2px solid red;
+}
