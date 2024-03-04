@@ -8,6 +8,7 @@ export interface Settings {
   size: number;
   firstOctave: number;
   lastOctave: number;
+  interpolationMethod: number;
 }
 
 const defaultSettings: Settings = {
@@ -15,6 +16,7 @@ const defaultSettings: Settings = {
   size: 512,
   firstOctave: 1,
   lastOctave: 8,
+  interpolationMethod: 1,
 };
 
 function App() {

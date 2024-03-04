@@ -12,7 +12,14 @@ interface CheckboxSettingRowProps extends SettingRowProps {
 interface NumberSettingRowProps extends SettingRowProps {
   value: number;
   changeHandler: (newValue: number) => void;
-  validator: (newValue: number) => boolean;
+  isValid: (newValue: number) => boolean;
+}
+
+interface SelectSettingRowProps extends SettingRowProps {
+  options: string[];
+  value: number;
+  changeHandler: (newValue: number) => void;
+  isValid: (newValue: number) => boolean;
 }
 
 interface ButtonSettingRowProps extends SettingRowProps {
@@ -40,7 +47,7 @@ export function NumberSettingRow({
   labelText,
   value,
   changeHandler,
-  validator,
+  isValid,
 }: NumberSettingRowProps) {
   const [inputValue, setInputValue] = useState(value);
   function applyChange(
@@ -50,13 +57,13 @@ export function NumberSettingRow({
   ) {
     const target = e.target as HTMLInputElement;
     const newValue = parseInt(target.value);
-    if (validator(newValue)) changeHandler(newValue);
+    if (isValid(newValue)) changeHandler(newValue);
   }
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     const newValue = parseInt(target.value);
     setInputValue(newValue);
-    if (validator(newValue)) target.classList.remove("is-invalid");
+    if (isValid(newValue)) target.classList.remove("is-invalid");
     else target.classList.add("is-invalid");
   }
   function increaseValue(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -64,7 +71,7 @@ export function NumberSettingRow({
     const oldValue = parseInt(e.currentTarget.value);
     for (let i = 1; i < 1000; i++) {
       const newValue = oldValue + i;
-      if (validator(newValue)) {
+      if (isValid(newValue)) {
         setInputValue(newValue);
         break;
       }
@@ -75,7 +82,7 @@ export function NumberSettingRow({
     const oldValue = parseInt(e.currentTarget.value);
     for (let i = 1; i < 1000; i++) {
       const newValue = oldValue - i;
-      if (validator(newValue)) {
+      if (isValid(newValue)) {
         setInputValue(newValue);
         break;
       }
@@ -88,7 +95,7 @@ export function NumberSettingRow({
     if (key === "ArrowDown") decreaseValue(e);
   }
   return (
-    <div className="settings-row">
+    <div className="setting-row">
       <label>{labelText}</label>
       <input
         type="number"
@@ -97,6 +104,32 @@ export function NumberSettingRow({
         onKeyDown={handleKeyDown}
         value={inputValue}
       />
+    </div>
+  );
+}
+
+export function SelectSettingRow({
+  labelText,
+  options,
+  value,
+  changeHandler,
+  isValid,
+}: SelectSettingRowProps) {
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const target = e.target as HTMLSelectElement;
+    const newValue = parseInt(target.value);
+    if (isValid(newValue)) changeHandler(newValue);
+  }
+  return (
+    <div className="setting-row">
+      <label>{labelText}</label>
+      <select onChange={handleChange} value={value}>
+        {options.map((option, index) => (
+          <option key={option} value={index}>
+            {option}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }

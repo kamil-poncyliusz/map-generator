@@ -1,5 +1,5 @@
 import { Settings } from "../App";
-import { NumberSettingRow } from "./SettingRows";
+import { SelectSettingRow, NumberSettingRow } from "./SettingRows";
 
 interface ControlsWindowProps {
   settings: Settings;
@@ -36,28 +36,35 @@ function ControlsWindow({ settings, changeSetting }: ControlsWindowProps) {
         labelText="Seed"
         value={settings["seed"]}
         changeHandler={changeSetting("seed")}
-        validator={isInRange(0, 1000000)}
+        isValid={isInRange(0, 1000000)}
       />
       <NumberSettingRow
         labelText="Size"
         value={settings["size"]}
         changeHandler={changeSetting("size")}
-        validator={isDivisibleByPowerOfTwo(settings.lastOctave)}
+        isValid={isDivisibleByPowerOfTwo(settings.lastOctave)}
       />
       <NumberSettingRow
         labelText="First octave"
         value={settings["firstOctave"]}
         changeHandler={changeSetting("firstOctave")}
-        validator={isInRange(1, settings.lastOctave)}
+        isValid={isInRange(1, settings.lastOctave)}
       />
       <NumberSettingRow
         labelText="Last octave"
         value={settings["lastOctave"]}
         changeHandler={changeSetting("lastOctave")}
-        validator={isInRange(
+        isValid={isInRange(
           settings.firstOctave,
           highestPowerOfTwoFactor(settings.size)
         )}
+      />
+      <SelectSettingRow
+        labelText="Interpolation"
+        options={["Bilinear", "Bicubic"]}
+        value={settings["interpolationMethod"]}
+        changeHandler={changeSetting("interpolationMethod")}
+        isValid={isInRange(0, 1)}
       />
     </div>
   );
