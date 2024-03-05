@@ -134,7 +134,7 @@ function getLayerInterpolation(interpolationMethod: number) {
   throw new Error("Invalid interpolation method");
 }
 
-function generateNoise(settings: Settings): number[][] {
+export function noise(settings: Settings): number[][] {
   const { size, firstOctave, lastOctave } = settings;
   const octaves = lastOctave - firstOctave + 1;
   const layers = [];
@@ -161,4 +161,58 @@ function generateNoise(settings: Settings): number[][] {
   return result;
 }
 
-export default generateNoise;
+function matrixValuesRange(matrix: number[][]): [number, number] {
+  let min = matrix[0][0];
+  let max = matrix[0][0];
+  for (let x = 0; x < matrix.length; x++) {
+    for (let y = 0; y < matrix[x].length; y++) {
+      if (matrix[x][y] < min) min = matrix[x][y];
+      if (matrix[x][y] > max) max = matrix[x][y];
+    }
+  }
+  return [min, max];
+}
+
+function layerHistogram(matrix: number[][]): number[] {
+  const histogram: number[] = [];
+  const [, max] = matrixValuesRange(matrix);
+  for (let i = 0; i < max; i++) {
+    histogram.push(0);
+  }
+  for (let x = 0; x < matrix.length; x++) {
+    for (let y = 0; y < matrix[x].length; y++) {
+      histogram[matrix[x][y]]++;
+    }
+  }
+  return histogram;
+}
+
+function waterLevel(matrix: number[][], landPercentage: number): number {
+  const histogram = layerHistogram(matrix);
+  const waterPercentage = 100 - landPercentage;
+  const totalPixels = matrix.length * matrix[0].length;
+  const waterPixels = Math.floor((waterPercentage / 100) * totalPixels);
+  let sum = 0;
+  for (let i = 0; i < histogram.length; i++) {
+    sum += histogram[i];
+    if (sum > waterPixels) {
+      return i;
+    }
+  }
+  return histogram.length;
+}
+
+export function landMatrix(settings: Settings): boolean[][] {
+  const matrix = noise(settings);
+  const landPercentage = settings.landPercentage;
+  const waterThreshold = waterLevel(matrix, landPercentage);
+  const result: boolean[][] = [];
+  for (let x = 0; x < matrix.length; x++) {
+    const row: boolean[] = [];
+    for (let y = 0; y < matrix[x].length; y++) {
+      row.push(matrix[x][y] >= waterThreshold);
+    }
+    result.push(row);
+  }
+  return result;
+}

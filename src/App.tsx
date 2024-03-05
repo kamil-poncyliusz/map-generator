@@ -9,6 +9,7 @@ export interface Settings {
   firstOctave: number;
   lastOctave: number;
   interpolationMethod: number;
+  landPercentage: number;
 }
 
 const defaultSettings: Settings = {
@@ -17,6 +18,7 @@ const defaultSettings: Settings = {
   firstOctave: 1,
   lastOctave: 8,
   interpolationMethod: 1,
+  landPercentage: 30,
 };
 
 function App() {

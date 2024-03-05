@@ -59,6 +59,12 @@ function ControlsWindow({ settings, changeSetting }: ControlsWindowProps) {
           highestPowerOfTwoFactor(settings.size)
         )}
       />
+      <NumberSettingRow
+        labelText="Land percentage"
+        value={settings["landPercentage"]}
+        changeHandler={changeSetting("landPercentage")}
+        isValid={isInRange(0, 100)}
+      />
       <SelectSettingRow
         labelText="Interpolation"
         options={["Bilinear", "Bicubic"]}
