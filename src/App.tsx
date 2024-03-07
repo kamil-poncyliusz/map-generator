@@ -10,6 +10,7 @@ export interface Settings {
   lastOctave: number;
   interpolationMethod: number;
   landPercentage: number;
+  viewNoise: boolean;
 }
 
 const defaultSettings: Settings = {
@@ -19,12 +20,13 @@ const defaultSettings: Settings = {
   lastOctave: 8,
   interpolationMethod: 1,
   landPercentage: 30,
+  viewNoise: false,
 };
 
 function App() {
   const [settings, setSettings] = useState({ ...defaultSettings });
   const changeSetting = (settingName: keyof Settings) => {
-    return (newValue: number) => {
+    return (newValue: number | boolean) => {
       if (settings[settingName] !== newValue)
         setSettings((previousValue) => ({
           ...previousValue,
@@ -32,6 +34,7 @@ function App() {
         }));
     };
   };
+
   return (
     <div id="app-wrapper">
       <ControlsWindow settings={settings} changeSetting={changeSetting} />

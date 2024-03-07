@@ -9,17 +9,19 @@ function MapPreviewWindow({ settings }: MapPreviewWindowProps) {
   function zoomIn() {
     console.log("Zooming in...");
   }
+
   function zoomOut() {
     console.log("Zooming out...");
   }
 
-  console.log("MapPreviewWindow rendered");
   return (
     <div id="map-preview-window">
-      <div id="canvas-wrapper">
-        <MapCanvas settings={settings} />
+      <div id="map-canvas-wrapper">
+        <div id="map-canvas-draggable">
+          <MapCanvas settings={settings} />
+        </div>
       </div>
-      <div id="map-preview-controls">
+      <div id="map-controls">
         <button type="button" onClick={zoomIn}>
           +
         </button>

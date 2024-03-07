@@ -6,7 +6,8 @@ interface MapCanvasProps {
   settings: Settings;
 }
 
-const waterColor = { r: 0, g: 30, b: 255 };
+const waterColor = { r: 60, g: 127, b: 255 };
+const landColor = { r: 40, g: 80, b: 0 };
 
 function ImageDataFromNoise(settings: Settings) {
   const generatedNoise = noise(settings);
@@ -35,9 +36,9 @@ function ImageDataFromLandMatrix(settings: Settings) {
     for (let j = 0; j < settings.size; j++) {
       const index = (i * settings.size + j) * 4;
       const isLand = generatedLandMatrix[i][j];
-      imageDataArray[index] = isLand ? 60 : waterColor.r;
-      imageDataArray[index + 1] = isLand ? 20 : waterColor.g;
-      imageDataArray[index + 2] = isLand ? 0 : waterColor.b;
+      imageDataArray[index] = isLand ? landColor.r : waterColor.r;
+      imageDataArray[index + 1] = isLand ? landColor.g : waterColor.g;
+      imageDataArray[index + 2] = isLand ? landColor.b : waterColor.b;
       imageDataArray[index + 3] = 255;
     }
   }
@@ -46,7 +47,10 @@ function ImageDataFromLandMatrix(settings: Settings) {
 
 function MapCanvas({ settings }: MapCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imageData = ImageDataFromLandMatrix(settings);
+  const imageData = settings.viewNoise
+    ? ImageDataFromNoise(settings)
+    : ImageDataFromLandMatrix(settings);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -54,6 +58,7 @@ function MapCanvas({ settings }: MapCanvasProps) {
     if (!context) return;
     context.putImageData(imageData, 0, 0);
   });
+
   return (
     <canvas
       ref={canvasRef}

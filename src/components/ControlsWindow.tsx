@@ -1,9 +1,15 @@
 import { Settings } from "../App";
-import { SelectSettingRow, NumberSettingRow } from "./SettingRows";
+import {
+  SelectSettingRow,
+  NumberSettingRow,
+  CheckboxSettingRow,
+} from "./SettingRows";
 
 interface ControlsWindowProps {
   settings: Settings;
-  changeSetting: (settingName: keyof Settings) => (newValue: number) => void;
+  changeSetting: (
+    settingName: keyof Settings
+  ) => (newValue: number | boolean) => void;
 }
 
 function isInRange(min: number, max: number): (value: number) => boolean {
@@ -29,7 +35,6 @@ function highestPowerOfTwoFactor(value: number): number {
 }
 
 function ControlsWindow({ settings, changeSetting }: ControlsWindowProps) {
-  console.log("ControlsWindow rendered");
   return (
     <div id="controls-window">
       <NumberSettingRow
@@ -71,6 +76,11 @@ function ControlsWindow({ settings, changeSetting }: ControlsWindowProps) {
         value={settings["interpolationMethod"]}
         changeHandler={changeSetting("interpolationMethod")}
         isValid={isInRange(0, 1)}
+      />
+      <CheckboxSettingRow
+        labelText="View noise"
+        value={settings["viewNoise"]}
+        changeHandler={changeSetting("viewNoise")}
       />
     </div>
   );
