@@ -1,5 +1,5 @@
-import { Settings } from "../App";
 import MapCanvas from "./MapCanvas";
+import { Settings } from "./PerlinNoiseMap";
 
 interface MapPreviewWindowProps {
   settings: Settings;

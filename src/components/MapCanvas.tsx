@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Settings } from "../App";
-import { noise, landMatrix } from "../scripts/noise";
+import { generateNoise, landMatrix } from "../scripts/noise";
 
 interface MapCanvasProps {
   settings: Settings;
@@ -10,7 +10,7 @@ const waterColor = { r: 60, g: 127, b: 255 };
 const landColor = { r: 40, g: 80, b: 0 };
 
 function ImageDataFromNoise(settings: Settings) {
-  const generatedNoise = noise(settings);
+  const generatedNoise = generateNoise(settings);
   const imageDataArray = new Uint8ClampedArray(
     settings.size * settings.size * 4
   );

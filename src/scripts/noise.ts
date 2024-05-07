@@ -134,7 +134,7 @@ function getLayerInterpolation(interpolationMethod: number) {
   throw new Error("Invalid interpolation method");
 }
 
-export function noise(settings: Settings): number[][] {
+export function generateNoise(settings: Settings): number[][] {
   const { size, firstOctave, lastOctave } = settings;
   const octaves = lastOctave - firstOctave + 1;
   const layers = [];
@@ -203,7 +203,7 @@ function waterLevel(matrix: number[][], landPercentage: number): number {
 }
 
 export function landMatrix(settings: Settings): boolean[][] {
-  const matrix = noise(settings);
+  const matrix = generateNoise(settings);
   const landPercentage = settings.landPercentage;
   const waterThreshold = waterLevel(matrix, landPercentage);
   const result: boolean[][] = [];

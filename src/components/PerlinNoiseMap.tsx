@@ -1,42 +1,47 @@
-import { Settings } from "../App";
+import { useState } from "react";
+import MapPreviewWindow from "./MapPreviewWindow";
 import {
-  SelectSettingRow,
-  NumberSettingRow,
-  CheckboxSettingRow,
-} from "./SettingRows";
+    SelectSettingRow,
+    NumberSettingRow,
+    CheckboxSettingRow,
+  } from "./SettingRows";
+import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
 
-interface ControlsWindowProps {
-  settings: Settings;
-  changeSetting: (
-    settingName: keyof Settings
-  ) => (newValue: number | boolean) => void;
+export interface Settings {
+  seed: number;
+  size: number;
+  firstOctave: number;
+  lastOctave: number;
+  interpolationMethod: number;
+  landPercentage: number;
+  viewNoise: boolean;
 }
 
-function isInRange(min: number, max: number): (value: number) => boolean {
-  return (value: number) => {
-    return value >= min && value <= max;
+const defaultSettings: Settings = {
+  seed: 0,
+  size: 512,
+  firstOctave: 1,
+  lastOctave: 8,
+  interpolationMethod: 1,
+  landPercentage: 30,
+  viewNoise: false,
+};
+
+function PerlinNoiseMap() {
+  const [settings, setSettings] = useState({ ...defaultSettings });
+  const changeSetting = (settingName: keyof Settings) => {
+    return (newValue: number | boolean) => {
+      if (settings[settingName] !== newValue)
+        setSettings((previousValue) => ({
+          ...previousValue,
+          [settingName]: newValue,
+        }));
+    };
   };
-}
 
-function isDivisibleByPowerOfTwo(power: number): (value: number) => boolean {
-  return (value: number) => {
-    if (value <= 0) return false;
-    return value % Math.pow(2, power) === 0;
-  };
-}
-
-function highestPowerOfTwoFactor(value: number): number {
-  let power = 0;
-  while (value % 2 === 0) {
-    power++;
-    value /= 2;
-  }
-  return power;
-}
-
-function ControlsWindow({ settings, changeSetting }: ControlsWindowProps) {
   return (
-    <div id="controls-window">
+    <div id="generator-wrapper">
+      <div id="controls-window">
       <NumberSettingRow
         labelText="Seed"
         value={settings["seed"]}
@@ -83,7 +88,9 @@ function ControlsWindow({ settings, changeSetting }: ControlsWindowProps) {
         changeHandler={changeSetting("viewNoise")}
       />
     </div>
+      <MapPreviewWindow settings={settings} />
+    </div>
   );
 }
 
-export default ControlsWindow;
+export default PerlinNoiseMap;
