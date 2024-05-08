@@ -1,11 +1,10 @@
 import MapCanvas from "./MapCanvas";
-import { Settings } from "./PerlinNoiseMap";
 
 interface MapPreviewWindowProps {
-  settings: Settings;
+  imageData: ImageData;
 }
 
-function MapPreviewWindow({ settings }: MapPreviewWindowProps) {
+function MapPreviewWindow({ imageData }: MapPreviewWindowProps) {
   function zoomIn() {
     console.log("Zooming in...");
   }
@@ -18,7 +17,7 @@ function MapPreviewWindow({ settings }: MapPreviewWindowProps) {
     <div id="map-preview-window">
       <div id="map-canvas-wrapper">
         <div id="map-canvas-draggable">
-          <MapCanvas settings={settings} />
+          <MapCanvas imageData={imageData} />
         </div>
       </div>
       <div id="map-controls">

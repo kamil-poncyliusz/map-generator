@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { generateNoise, landMatrix } from "../scripts/noise";
 import MapPreviewWindow from "./MapPreviewWindow";
 import {
     SelectSettingRow,
@@ -17,6 +18,7 @@ export interface Settings {
   viewNoise: boolean;
 }
 
+
 const defaultSettings: Settings = {
   seed: 0,
   size: 512,
@@ -26,6 +28,45 @@ const defaultSettings: Settings = {
   landPercentage: 30,
   viewNoise: false,
 };
+
+const waterColor = { r: 60, g: 127, b: 255 };
+const landColor = { r: 40, g: 80, b: 0 };
+
+function ImageDataFromNoise(settings: Settings) {
+  const generatedNoise = generateNoise(settings);
+  const imageDataArray = new Uint8ClampedArray(
+    settings.size * settings.size * 4
+  );
+  for (let i = 0; i < settings.size; i++) {
+    for (let j = 0; j < settings.size; j++) {
+      const index = (i * settings.size + j) * 4;
+      const value = Math.floor((generatedNoise[i][j] / 1000) * 256);
+      imageDataArray[index] = value;
+      imageDataArray[index + 1] = value;
+      imageDataArray[index + 2] = value;
+      imageDataArray[index + 3] = 255;
+    }
+  }
+  return new ImageData(imageDataArray, settings.size, settings.size);
+}
+
+function ImageDataFromLandMatrix(settings: Settings) {
+  const generatedLandMatrix = landMatrix(settings);
+  const imageDataArray = new Uint8ClampedArray(
+    settings.size * settings.size * 4
+  );
+  for (let i = 0; i < settings.size; i++) {
+    for (let j = 0; j < settings.size; j++) {
+      const index = (i * settings.size + j) * 4;
+      const isLand = generatedLandMatrix[i][j];
+      imageDataArray[index] = isLand ? landColor.r : waterColor.r;
+      imageDataArray[index + 1] = isLand ? landColor.g : waterColor.g;
+      imageDataArray[index + 2] = isLand ? landColor.b : waterColor.b;
+      imageDataArray[index + 3] = 255;
+    }
+  }
+  return new ImageData(imageDataArray, settings.size, settings.size);
+}
 
 function PerlinNoiseMap() {
   const [settings, setSettings] = useState({ ...defaultSettings });
@@ -38,6 +79,9 @@ function PerlinNoiseMap() {
         }));
     };
   };
+  const imageData = settings.viewNoise
+    ? ImageDataFromNoise(settings)
+    : ImageDataFromLandMatrix(settings);
 
   return (
     <div id="generator-wrapper">
@@ -88,7 +132,7 @@ function PerlinNoiseMap() {
         changeHandler={changeSetting("viewNoise")}
       />
     </div>
-      <MapPreviewWindow settings={settings} />
+      <MapPreviewWindow imageData={imageData} />
     </div>
   );
 }
