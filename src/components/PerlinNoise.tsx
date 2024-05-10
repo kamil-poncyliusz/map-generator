@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { perlinNoise, landMatrix } from "../scripts/perlinNoise";
+import { perlinNoise } from "../scripts/perlinNoise";
 import MapPreviewWindow from "./MapPreviewWindow";
 import {
     SelectSettingRow,
@@ -7,49 +7,43 @@ import {
   } from "./SettingRows";
 import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
 
-export interface PerlinNoiseMapSettings {
+export interface PerlinNoiseSettings {
   seed: number;
   size: number;
   firstOctave: number;
   lastOctave: number;
   interpolationMethod: number;
-  landPercentage: number;
 }
 
-const defaultPerlinNoiseMapSettings: PerlinNoiseMapSettings = {
+const defaultPerlinNoiseSetting: PerlinNoiseSettings = {
   seed: 0,
   size: 512,
   firstOctave: 1,
   lastOctave: 8,
   interpolationMethod: 1,
-  landPercentage: 30,
 };
 
-const waterColor = { r: 60, g: 127, b: 255 };
-const landColor = { r: 40, g: 80, b: 0 };
-
-function ImageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
-  const noise = perlinNoise(settings);
-  const generatedLandMatrix = landMatrix(noise, settings.landPercentage);
+function ImageDataFromNoise(settings: PerlinNoiseSettings) {
+  const generatedNoise = perlinNoise(settings);
   const imageDataArray = new Uint8ClampedArray(
     settings.size * settings.size * 4
   );
   for (let i = 0; i < settings.size; i++) {
     for (let j = 0; j < settings.size; j++) {
       const index = (i * settings.size + j) * 4;
-      const isLand = generatedLandMatrix[i][j];
-      imageDataArray[index] = isLand ? landColor.r : waterColor.r;
-      imageDataArray[index + 1] = isLand ? landColor.g : waterColor.g;
-      imageDataArray[index + 2] = isLand ? landColor.b : waterColor.b;
+      const value = Math.floor((generatedNoise[i][j] / 1000) * 256);
+      imageDataArray[index] = value;
+      imageDataArray[index + 1] = value;
+      imageDataArray[index + 2] = value;
       imageDataArray[index + 3] = 255;
     }
   }
   return new ImageData(imageDataArray, settings.size, settings.size);
 }
 
-function PerlinNoiseMap() {
-  const [settings, setSettings] = useState({ ...defaultPerlinNoiseMapSettings });
-  const changeSetting = (settingName: keyof PerlinNoiseMapSettings) => {
+function PerlinNoise() {
+  const [settings, setSettings] = useState({ ...defaultPerlinNoiseSetting });
+  const changeSetting = (settingName: keyof PerlinNoiseSettings) => {
     return (newValue: number | boolean) => {
       if (settings[settingName] !== newValue)
         setSettings((previousValue) => ({
@@ -58,7 +52,7 @@ function PerlinNoiseMap() {
         }));
     };
   };
-  const imageData = ImageDataFromLandMatrix(settings);
+  const imageData = ImageDataFromNoise(settings);
 
   return (
     <div id="generator-wrapper">
@@ -90,12 +84,6 @@ function PerlinNoiseMap() {
           highestPowerOfTwoFactor(settings.size)
         )}
       />
-      <NumberSettingRow
-        labelText="Land percentage"
-        value={settings["landPercentage"]}
-        changeHandler={changeSetting("landPercentage")}
-        isValid={isInRange(0, 100)}
-      />
       <SelectSettingRow
         labelText="Interpolation"
         options={["Bilinear", "Bicubic"]}
@@ -109,4 +97,4 @@ function PerlinNoiseMap() {
   );
 }
 
-export default PerlinNoiseMap;
+export default PerlinNoise;

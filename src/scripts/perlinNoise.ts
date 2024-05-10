@@ -1,8 +1,13 @@
-import { Settings } from "../App";
+interface PerlinNoiseParams {
+  seed: number;
+  size: number;
+  firstOctave: number;
+  lastOctave: number;
+  interpolationMethod: number;
+}
 
-function random2dArray(settings: Settings): number[][] {
+function random2dArray(seed:number, size:number): number[][] {
   const limit = 1000;
-  const { seed, size } = settings;
   let n = seed;
   const result: number[][] = [];
   for (let i = 0; i < size; i++) {
@@ -134,12 +139,12 @@ function getLayerInterpolation(interpolationMethod: number) {
   throw new Error("Invalid interpolation method");
 }
 
-export function generateNoise(settings: Settings): number[][] {
-  const { size, firstOctave, lastOctave } = settings;
+export function perlinNoise(params:PerlinNoiseParams): number[][] {
+  const { seed, size, firstOctave, lastOctave, interpolationMethod } = params;
   const octaves = lastOctave - firstOctave + 1;
   const layers = [];
-  layers.push(random2dArray(settings));
-  const getLayer = getLayerInterpolation(settings.interpolationMethod);
+  layers.push(random2dArray(seed, size));
+  const getLayer = getLayerInterpolation(interpolationMethod);
   for (let octave = 1; octave < lastOctave; octave++) {
     const layer = getLayer(layers[0], octave);
     layers.push(layer);
@@ -202,9 +207,7 @@ function waterLevel(matrix: number[][], landPercentage: number): number {
   return histogram.length;
 }
 
-export function landMatrix(settings: Settings): boolean[][] {
-  const matrix = generateNoise(settings);
-  const landPercentage = settings.landPercentage;
+export function landMatrix(matrix:number[][], landPercentage:number): boolean[][] {
   const waterThreshold = waterLevel(matrix, landPercentage);
   const result: boolean[][] = [];
   for (let x = 0; x < matrix.length; x++) {
