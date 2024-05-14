@@ -23,7 +23,7 @@ const defaultPerlinNoiseSetting: PerlinNoiseSettings = {
   interpolationMethod: 1,
 };
 
-function ImageDataFromNoise(settings: PerlinNoiseSettings) {
+function imageDataFromNoise(settings: PerlinNoiseSettings) {
   const generatedNoise = perlinNoise(settings);
   const imageDataArray = new Uint8ClampedArray(
     settings.size * settings.size * 4
@@ -52,7 +52,7 @@ function PerlinNoise() {
         }));
     };
   };
-  const imageData = ImageDataFromNoise(settings);
+  const imageData = imageDataFromNoise(settings);
 
   return (
     <div id="generator-wrapper">

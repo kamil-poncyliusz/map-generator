@@ -28,7 +28,7 @@ const defaultPerlinNoiseMapSettings: PerlinNoiseMapSettings = {
 const waterColor = { r: 60, g: 127, b: 255 };
 const landColor = { r: 40, g: 80, b: 0 };
 
-function ImageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
+function imageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
   const noise = perlinNoise(settings);
   const generatedLandMatrix = landMatrix(noise, settings.landPercentage);
   const imageDataArray = new Uint8ClampedArray(
@@ -58,7 +58,7 @@ function PerlinNoiseMap() {
         }));
     };
   };
-  const imageData = ImageDataFromLandMatrix(settings);
+  const imageData = imageDataFromLandMatrix(settings);
 
   return (
     <div id="generator-wrapper">
