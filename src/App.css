@@ -1,3 +1,11 @@
+#variant-selection-wrapper {
+  display: block;
+  position: absolute;
+}
+#variant-selection-wrapper > select {
+  width: fit-content;
+  padding: 0.5rem;
+}
 #generator-wrapper {
   display: flex;
   flex-direction: row;
