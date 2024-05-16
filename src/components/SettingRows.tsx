@@ -28,6 +28,11 @@ interface SelectSettingRowProps extends SettingRowProps {
   isValid: (newValue: number) => boolean;
 }
 
+interface ColorSettingRowProps extends SettingRowProps {
+  value: string;
+  changeHandler: (newValue: string) => void;
+}
+
 interface ButtonSettingRowProps extends SettingRowProps {
   clickHandler: () => void;
 }
@@ -201,6 +206,23 @@ export function SelectSettingRow({
           </option>
         ))}
       </select>
+    </div>
+  );
+}
+
+export function ColorSettingRow({
+  labelText,
+  value,
+  changeHandler,
+}: ColorSettingRowProps) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const target = e.target as HTMLInputElement;
+    changeHandler(target.value);
+  }
+  return (
+    <div className="setting-row">
+      <label>{labelText}</label>
+      <input type="color" onChange={handleChange} value={value} />
     </div>
   );
 }

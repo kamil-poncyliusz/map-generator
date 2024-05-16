@@ -1,11 +1,13 @@
 import { useState } from "react";
 import MapPreviewWindow from "./MapPreviewWindow";
 import {
+  ColorSettingRow,
   FloatSettingRow,
     NumberSettingRow,
   } from "./SettingRows";
 import { isInRange } from "../scripts/validators";
 import { cellularAutomata } from "../scripts/cellularAutomata";
+import { parseHexColor } from "../scripts/helpers";
 
 interface CellularAutomataMapSettings {
   size: number;
@@ -13,6 +15,8 @@ interface CellularAutomataMapSettings {
   iterations: number;
   deathThreshold: number;
   initialDensity: number;
+  landColor: string;
+  waterColor: string;
 }
 
 const defaultSettings: CellularAutomataMapSettings = {
@@ -21,16 +25,17 @@ const defaultSettings: CellularAutomataMapSettings = {
   iterations: 5,
   deathThreshold: 5,
   initialDensity: 0.5,
+  landColor: "#285000",
+  waterColor: "#3c7fff",
 };
-
-const waterColor = { r: 60, g: 127, b: 255 };
-const landColor = { r: 40, g: 80, b: 0 };
 
 function imageDataFromLandMatrix(settings:CellularAutomataMapSettings) {
   const generatedLandMatrix = cellularAutomata(settings);
   const imageDataArray = new Uint8ClampedArray(
     settings.size * settings.size * 4
   );
+  const landColor = parseHexColor(settings.landColor);
+  const waterColor = parseHexColor(settings.waterColor);
   for (let i = 0; i < settings.size; i++) {
     for (let j = 0; j < settings.size; j++) {
       const index = (i * settings.size + j) * 4;
@@ -47,7 +52,7 @@ function imageDataFromLandMatrix(settings:CellularAutomataMapSettings) {
 function CellularAutomataMap() {
   const [settings, setSettings] = useState({ ...defaultSettings });
   const changeSetting = (settingName: keyof CellularAutomataMapSettings) => {
-    return (newValue: number | boolean) => {
+    return (newValue: number | string | boolean) => {
       if (settings[settingName] !== newValue)
         setSettings((previousValue) => ({
           ...previousValue,
@@ -89,6 +94,16 @@ function CellularAutomataMap() {
         value={settings["initialDensity"]}
         changeHandler={changeSetting("initialDensity")}
         isValid={isInRange(0, 1)}
+      />
+      <ColorSettingRow
+        labelText="Land Color"
+        value={settings["landColor"]}
+        changeHandler={changeSetting("landColor")}
+      />
+      <ColorSettingRow
+        labelText="Water Color"
+        value={settings["waterColor"]}
+        changeHandler={changeSetting("waterColor")}
       />
     </div>
       <MapPreviewWindow imageData={imageData} />

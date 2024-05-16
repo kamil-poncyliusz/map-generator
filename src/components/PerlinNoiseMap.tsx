@@ -4,8 +4,10 @@ import MapPreviewWindow from "./MapPreviewWindow";
 import {
     SelectSettingRow,
     NumberSettingRow,
+    ColorSettingRow,
   } from "./SettingRows";
 import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
+import { parseHexColor } from "../scripts/helpers";
 
 export interface PerlinNoiseMapSettings {
   seed: number;
@@ -14,6 +16,8 @@ export interface PerlinNoiseMapSettings {
   lastOctave: number;
   interpolationMethod: number;
   landPercentage: number;
+  landColor: string;
+  waterColor: string;
 }
 
 const defaultPerlinNoiseMapSettings: PerlinNoiseMapSettings = {
@@ -23,10 +27,9 @@ const defaultPerlinNoiseMapSettings: PerlinNoiseMapSettings = {
   lastOctave: 8,
   interpolationMethod: 1,
   landPercentage: 30,
+  landColor: "#285000",
+  waterColor: "#3c7fff",
 };
-
-const waterColor = { r: 60, g: 127, b: 255 };
-const landColor = { r: 40, g: 80, b: 0 };
 
 function imageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
   const noise = perlinNoise(settings);
@@ -34,6 +37,8 @@ function imageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
   const imageDataArray = new Uint8ClampedArray(
     settings.size * settings.size * 4
   );
+  const landColor = parseHexColor(settings.landColor);
+  const waterColor = parseHexColor(settings.waterColor);
   for (let i = 0; i < settings.size; i++) {
     for (let j = 0; j < settings.size; j++) {
       const index = (i * settings.size + j) * 4;
@@ -50,7 +55,7 @@ function imageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
 function PerlinNoiseMap() {
   const [settings, setSettings] = useState({ ...defaultPerlinNoiseMapSettings });
   const changeSetting = (settingName: keyof PerlinNoiseMapSettings) => {
-    return (newValue: number | boolean) => {
+    return (newValue: number | string | boolean) => {
       if (settings[settingName] !== newValue)
         setSettings((previousValue) => ({
           ...previousValue,
@@ -95,6 +100,16 @@ function PerlinNoiseMap() {
         value={settings["landPercentage"]}
         changeHandler={changeSetting("landPercentage")}
         isValid={isInRange(0, 100)}
+      />
+      <ColorSettingRow
+        labelText="Land color"
+        value={settings["landColor"]}
+        changeHandler={changeSetting("landColor")}
+      />
+      <ColorSettingRow
+        labelText="Water color"
+        value={settings["waterColor"]}
+        changeHandler={changeSetting("waterColor")}
       />
       <SelectSettingRow
         labelText="Interpolation"
