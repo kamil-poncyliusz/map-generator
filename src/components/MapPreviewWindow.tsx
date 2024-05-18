@@ -10,16 +10,16 @@ function MapPreviewWindow({ imageData }: MapPreviewWindowProps) {
   const draggableRef = useRef<HTMLDivElement>(null);
   const [scaleExponent, setScaleExponent] = useState(0);
   function moveCanvas(shiftX: number, shiftY: number) {
-    if(!draggableRef.current) return console.error("draggableRef is null");
-    if(!draggableRef.current.style.left) draggableRef.current.style.left = "0px";
-    if(!draggableRef.current.style.top) draggableRef.current.style.top = "0px";
+    if (!draggableRef.current) return console.error("draggableRef is null");
+    if (!draggableRef.current.style.left) draggableRef.current.style.left = "0px";
+    if (!draggableRef.current.style.top) draggableRef.current.style.top = "0px";
     const currentLeft = parseInt(draggableRef.current.style.left);
     const currentTop = parseInt(draggableRef.current.style.top);
     draggableRef.current.style.left = `${currentLeft + shiftX}px`;
     draggableRef.current.style.top = `${currentTop + shiftY}px`;
   }
   function zoomIn() {
-    const positionShift = -imageData.width * Math.pow(2, scaleExponent-1);
+    const positionShift = -imageData.width * Math.pow(2, scaleExponent - 1);
     setScaleExponent(scaleExponent + 1);
     moveCanvas(positionShift, positionShift);
   }
@@ -28,17 +28,17 @@ function MapPreviewWindow({ imageData }: MapPreviewWindowProps) {
     setScaleExponent(scaleExponent - 1);
     moveCanvas(positionShift, positionShift);
   }
-  function dragStart(){
+  function dragStart() {
     isDragged = true;
-    if(!draggableRef.current) return console.error("draggableRef is null");
-    if(!draggableRef.current.style.left) draggableRef.current.style.left = "0px";
-    if(!draggableRef.current.style.top) draggableRef.current.style.top = "0px";
+    if (!draggableRef.current) return console.error("draggableRef is null");
+    if (!draggableRef.current.style.left) draggableRef.current.style.left = "0px";
+    if (!draggableRef.current.style.top) draggableRef.current.style.top = "0px";
   }
-  function dragEnd(){
+  function dragEnd() {
     if (!isDragged) return;
     isDragged = false;
   }
-  function dragMove(event: React.MouseEvent){
+  function dragMove(event: React.MouseEvent) {
     if (!isDragged) return;
     moveCanvas(event.movementX, event.movementY);
   }

@@ -19,7 +19,7 @@ function MapCanvas({ imageData, scaleExponent }: MapCanvasProps) {
     const tempCanvas = document.createElement("canvas");
     tempCanvas.width = imageData.width;
     tempCanvas.height = imageData.height;
-    tempCanvas.getContext("2d")?.putImageData(imageData, 0, 0);  
+    tempCanvas.getContext("2d")?.putImageData(imageData, 0, 0);
     const img = new Image();
     img.src = tempCanvas.toDataURL();
     const handleLoad = () => {

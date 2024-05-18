@@ -145,7 +145,7 @@ export function FloatSettingRow({
   function increaseValue(e: React.KeyboardEvent<HTMLInputElement>) {
     e.preventDefault();
     const oldValue = parseFloat(e.currentTarget.value);
-    for (let i = 0.01; i < 100; i+=0.01) {
+    for (let i = 0.01; i < 100; i += 0.01) {
       const newValue = Math.round((oldValue + i) * 100) / 100;
       if (isValid(newValue)) {
         setInputValue(newValue);
@@ -156,7 +156,7 @@ export function FloatSettingRow({
   function decreaseValue(e: React.KeyboardEvent<HTMLInputElement>) {
     e.preventDefault();
     const oldValue = parseFloat(e.currentTarget.value);
-    for (let i = 0.01; i < 100; i+=0.01) {
+    for (let i = 0.01; i < 100; i += 0.01) {
       const newValue = Math.round((oldValue - i) * 100) / 100;
       if (isValid(newValue)) {
         setInputValue(newValue);

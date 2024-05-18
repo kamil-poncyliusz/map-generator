@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-export function VariantSelectField({changeHandler}: {changeHandler: (newValue: number) => void}){
+export function VariantSelectField({ changeHandler }: { changeHandler: (newValue: number) => void }) {
   const [selectedValue, setSelectedValue] = useState("0");
-  function handleChange(e: React.ChangeEvent<HTMLSelectElement>){
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const target = e.target as HTMLSelectElement;
     setSelectedValue(target.value);
     changeHandler(parseInt(target.value));
   }
-  
+
   return (
     <div id="variant-selection-wrapper">
       <select name="variant-select" id="variant-select" value={selectedValue} onChange={handleChange}>

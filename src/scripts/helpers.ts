@@ -4,7 +4,7 @@ interface ParsedColor {
   b: number;
 }
 
-export function random2dArray(seed:number, size:number, limit:number): number[][] {
+export function random2dArray(seed: number, size: number, limit: number): number[][] {
   let n = seed;
   const result: number[][] = [];
   for (let i = 0; i < size; i++) {
@@ -18,8 +18,8 @@ export function random2dArray(seed:number, size:number, limit:number): number[][
   }
   return result;
 }
-  
-export function filled2dArray(size: number, value:number): number[][] {
+
+export function filled2dArray(size: number, value: number): number[][] {
   const result: number[][] = [];
   for (let i = 0; i < size; i++) {
     const row: number[] = [];

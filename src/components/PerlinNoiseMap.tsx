@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { perlinNoise, landMatrix } from "../scripts/perlinNoise";
+import { perlinNoise } from "../scripts/perlin-noise";
 import MapPreviewWindow from "./MapPreviewWindow";
 import {
-    SelectSettingRow,
-    NumberSettingRow,
-    ColorSettingRow,
-  } from "./SettingRows";
+  SelectSettingRow,
+  NumberSettingRow,
+  ColorSettingRow,
+} from "./SettingRows";
 import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
 import { parseHexColor } from "../scripts/helpers";
+import { landMatrix } from "../scripts/landmap-generator";
 
 export interface PerlinNoiseMapSettings {
   seed: number;
@@ -68,57 +69,57 @@ function PerlinNoiseMap() {
   return (
     <div id="generator-wrapper">
       <div id="controls-window">
-      <NumberSettingRow
-        labelText="Seed"
-        value={settings["seed"]}
-        changeHandler={changeSetting("seed")}
-        isValid={isInRange(0, 1000000)}
-      />
-      <NumberSettingRow
-        labelText="Size"
-        value={settings["size"]}
-        changeHandler={changeSetting("size")}
-        isValid={isDivisibleByPowerOfTwo(settings.lastOctave)}
-      />
-      <NumberSettingRow
-        labelText="First octave"
-        value={settings["firstOctave"]}
-        changeHandler={changeSetting("firstOctave")}
-        isValid={isInRange(1, settings.lastOctave)}
-      />
-      <NumberSettingRow
-        labelText="Last octave"
-        value={settings["lastOctave"]}
-        changeHandler={changeSetting("lastOctave")}
-        isValid={isInRange(
-          settings.firstOctave,
-          highestPowerOfTwoFactor(settings.size)
-        )}
-      />
-      <NumberSettingRow
-        labelText="Land percentage"
-        value={settings["landPercentage"]}
-        changeHandler={changeSetting("landPercentage")}
-        isValid={isInRange(0, 100)}
-      />
-      <ColorSettingRow
-        labelText="Land color"
-        value={settings["landColor"]}
-        changeHandler={changeSetting("landColor")}
-      />
-      <ColorSettingRow
-        labelText="Water color"
-        value={settings["waterColor"]}
-        changeHandler={changeSetting("waterColor")}
-      />
-      <SelectSettingRow
-        labelText="Interpolation"
-        options={["Bilinear", "Bicubic"]}
-        value={settings["interpolationMethod"]}
-        changeHandler={changeSetting("interpolationMethod")}
-        isValid={isInRange(0, 1)}
-      />
-    </div>
+        <NumberSettingRow
+          labelText="Seed"
+          value={settings["seed"]}
+          changeHandler={changeSetting("seed")}
+          isValid={isInRange(0, 1000000)}
+        />
+        <NumberSettingRow
+          labelText="Size"
+          value={settings["size"]}
+          changeHandler={changeSetting("size")}
+          isValid={isDivisibleByPowerOfTwo(settings.lastOctave)}
+        />
+        <NumberSettingRow
+          labelText="First octave"
+          value={settings["firstOctave"]}
+          changeHandler={changeSetting("firstOctave")}
+          isValid={isInRange(1, settings.lastOctave)}
+        />
+        <NumberSettingRow
+          labelText="Last octave"
+          value={settings["lastOctave"]}
+          changeHandler={changeSetting("lastOctave")}
+          isValid={isInRange(
+            settings.firstOctave,
+            highestPowerOfTwoFactor(settings.size)
+          )}
+        />
+        <NumberSettingRow
+          labelText="Land percentage"
+          value={settings["landPercentage"]}
+          changeHandler={changeSetting("landPercentage")}
+          isValid={isInRange(0, 100)}
+        />
+        <ColorSettingRow
+          labelText="Land color"
+          value={settings["landColor"]}
+          changeHandler={changeSetting("landColor")}
+        />
+        <ColorSettingRow
+          labelText="Water color"
+          value={settings["waterColor"]}
+          changeHandler={changeSetting("waterColor")}
+        />
+        <SelectSettingRow
+          labelText="Interpolation"
+          options={["Bilinear", "Bicubic"]}
+          value={settings["interpolationMethod"]}
+          changeHandler={changeSetting("interpolationMethod")}
+          isValid={isInRange(0, 1)}
+        />
+      </div>
       <MapPreviewWindow imageData={imageData} />
     </div>
   );

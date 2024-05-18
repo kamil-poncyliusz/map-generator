@@ -29,11 +29,11 @@ export function cellularAutomata(settings: CellularAutomataSettings) {
                 for (let x = -1; x < 2; x++) {
                     for (let y = -1; y < 2; y++) {
                         let newX = i + x;
-                        if(newX < 0) newX += size;
-                        else if(newX >= size) newX -= size;
+                        if (newX < 0) newX += size;
+                        else if (newX >= size) newX -= size;
                         let newY = j + y;
-                        if(newY < 0) newY += size;
-                        else if(newY >= size) newY -= size;
+                        if (newY < 0) newY += size;
+                        else if (newY >= size) newY -= size;
                         if (!grid[newX][newY]) deadNeighbors++;
                     }
                 }

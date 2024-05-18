@@ -10,9 +10,9 @@ function App() {
   function EmptyVariant() {
     return (
       <div id="generator-wrapper">
-      <div id="controls-window"></div>
-      <div id="map-preview-window"></div>
-    </div>
+        <div id="controls-window"></div>
+        <div id="map-preview-window"></div>
+      </div>
     )
   }
   const mapVariantComponents = [
@@ -22,13 +22,13 @@ function App() {
     CellularAutomataMap,
   ];
   const changeMapVariant = (newValue: number) => {
-    if(newValue < 0 || newValue >= mapVariantComponents.length) return;
+    if (newValue < 0 || newValue >= mapVariantComponents.length) return;
     setMapVariant(newValue);
   };
   const SelectedComponent = mapVariantComponents[mapVariant];
   return (
     <>
-      <VariantSelectField changeHandler={changeMapVariant}/>
+      <VariantSelectField changeHandler={changeMapVariant} />
       {<SelectedComponent />}
     </>
   );

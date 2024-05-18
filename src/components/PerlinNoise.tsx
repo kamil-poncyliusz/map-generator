@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { perlinNoise } from "../scripts/perlinNoise";
+import { perlinNoise } from "../scripts/perlin-noise";
 import MapPreviewWindow from "./MapPreviewWindow";
 import {
-    SelectSettingRow,
-    NumberSettingRow,
-  } from "./SettingRows";
+  SelectSettingRow,
+  NumberSettingRow,
+} from "./SettingRows";
 import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
 
 export interface PerlinNoiseSettings {
@@ -57,41 +57,41 @@ function PerlinNoise() {
   return (
     <div id="generator-wrapper">
       <div id="controls-window">
-      <NumberSettingRow
-        labelText="Seed"
-        value={settings["seed"]}
-        changeHandler={changeSetting("seed")}
-        isValid={isInRange(0, 1000000)}
-      />
-      <NumberSettingRow
-        labelText="Size"
-        value={settings["size"]}
-        changeHandler={changeSetting("size")}
-        isValid={isDivisibleByPowerOfTwo(settings.lastOctave)}
-      />
-      <NumberSettingRow
-        labelText="First octave"
-        value={settings["firstOctave"]}
-        changeHandler={changeSetting("firstOctave")}
-        isValid={isInRange(1, settings.lastOctave)}
-      />
-      <NumberSettingRow
-        labelText="Last octave"
-        value={settings["lastOctave"]}
-        changeHandler={changeSetting("lastOctave")}
-        isValid={isInRange(
-          settings.firstOctave,
-          highestPowerOfTwoFactor(settings.size)
-        )}
-      />
-      <SelectSettingRow
-        labelText="Interpolation"
-        options={["Bilinear", "Bicubic"]}
-        value={settings["interpolationMethod"]}
-        changeHandler={changeSetting("interpolationMethod")}
-        isValid={isInRange(0, 1)}
-      />
-    </div>
+        <NumberSettingRow
+          labelText="Seed"
+          value={settings["seed"]}
+          changeHandler={changeSetting("seed")}
+          isValid={isInRange(0, 1000000)}
+        />
+        <NumberSettingRow
+          labelText="Size"
+          value={settings["size"]}
+          changeHandler={changeSetting("size")}
+          isValid={isDivisibleByPowerOfTwo(settings.lastOctave)}
+        />
+        <NumberSettingRow
+          labelText="First octave"
+          value={settings["firstOctave"]}
+          changeHandler={changeSetting("firstOctave")}
+          isValid={isInRange(1, settings.lastOctave)}
+        />
+        <NumberSettingRow
+          labelText="Last octave"
+          value={settings["lastOctave"]}
+          changeHandler={changeSetting("lastOctave")}
+          isValid={isInRange(
+            settings.firstOctave,
+            highestPowerOfTwoFactor(settings.size)
+          )}
+        />
+        <SelectSettingRow
+          labelText="Interpolation"
+          options={["Bilinear", "Bicubic"]}
+          value={settings["interpolationMethod"]}
+          changeHandler={changeSetting("interpolationMethod")}
+          isValid={isInRange(0, 1)}
+        />
+      </div>
       <MapPreviewWindow imageData={imageData} />
     </div>
   );

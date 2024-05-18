@@ -3,10 +3,10 @@ import MapPreviewWindow from "./MapPreviewWindow";
 import {
   ColorSettingRow,
   FloatSettingRow,
-    NumberSettingRow,
-  } from "./SettingRows";
+  NumberSettingRow,
+} from "./SettingRows";
 import { isInRange } from "../scripts/validators";
-import { cellularAutomata } from "../scripts/cellularAutomata";
+import { cellularAutomata } from "../scripts/cellular-automata";
 import { parseHexColor } from "../scripts/helpers";
 
 interface CellularAutomataMapSettings {
@@ -29,7 +29,7 @@ const defaultSettings: CellularAutomataMapSettings = {
   waterColor: "#3c7fff",
 };
 
-function imageDataFromLandMatrix(settings:CellularAutomataMapSettings) {
+function imageDataFromLandMatrix(settings: CellularAutomataMapSettings) {
   const generatedLandMatrix = cellularAutomata(settings);
   const imageDataArray = new Uint8ClampedArray(
     settings.size * settings.size * 4
@@ -65,47 +65,47 @@ function CellularAutomataMap() {
   return (
     <div id="generator-wrapper">
       <div id="controls-window">
-      <NumberSettingRow
-        labelText="Seed"
-        value={settings["seed"]}
-        changeHandler={changeSetting("seed")}
-        isValid={isInRange(0, 1000000)}
-      />
-      <NumberSettingRow
-        labelText="Size"
-        value={settings["size"]}
-        changeHandler={changeSetting("size")}
-        isValid={isInRange(0, 5000)}
-      />
-      <NumberSettingRow
-        labelText="Iterations"
-        value={settings["iterations"]}
-        changeHandler={changeSetting("iterations")}
-        isValid={isInRange(0, 100)}
-      />
-      <NumberSettingRow
-        labelText="Death Threshold"
-        value={settings["deathThreshold"]}
-        changeHandler={changeSetting("deathThreshold")}
-        isValid={isInRange(0, 8)}
-      />
-      <FloatSettingRow
-        labelText="Initial Density"
-        value={settings["initialDensity"]}
-        changeHandler={changeSetting("initialDensity")}
-        isValid={isInRange(0, 1)}
-      />
-      <ColorSettingRow
-        labelText="Land Color"
-        value={settings["landColor"]}
-        changeHandler={changeSetting("landColor")}
-      />
-      <ColorSettingRow
-        labelText="Water Color"
-        value={settings["waterColor"]}
-        changeHandler={changeSetting("waterColor")}
-      />
-    </div>
+        <NumberSettingRow
+          labelText="Seed"
+          value={settings["seed"]}
+          changeHandler={changeSetting("seed")}
+          isValid={isInRange(0, 1000000)}
+        />
+        <NumberSettingRow
+          labelText="Size"
+          value={settings["size"]}
+          changeHandler={changeSetting("size")}
+          isValid={isInRange(0, 5000)}
+        />
+        <NumberSettingRow
+          labelText="Iterations"
+          value={settings["iterations"]}
+          changeHandler={changeSetting("iterations")}
+          isValid={isInRange(0, 100)}
+        />
+        <NumberSettingRow
+          labelText="Death Threshold"
+          value={settings["deathThreshold"]}
+          changeHandler={changeSetting("deathThreshold")}
+          isValid={isInRange(0, 8)}
+        />
+        <FloatSettingRow
+          labelText="Initial Density"
+          value={settings["initialDensity"]}
+          changeHandler={changeSetting("initialDensity")}
+          isValid={isInRange(0, 1)}
+        />
+        <ColorSettingRow
+          labelText="Land Color"
+          value={settings["landColor"]}
+          changeHandler={changeSetting("landColor")}
+        />
+        <ColorSettingRow
+          labelText="Water Color"
+          value={settings["waterColor"]}
+          changeHandler={changeSetting("waterColor")}
+        />
+      </div>
       <MapPreviewWindow imageData={imageData} />
     </div>
   );
