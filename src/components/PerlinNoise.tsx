@@ -31,7 +31,7 @@ function imageDataFromNoise(settings: PerlinNoiseSettings) {
   for (let i = 0; i < settings.size; i++) {
     for (let j = 0; j < settings.size; j++) {
       const index = (i * settings.size + j) * 4;
-      const value = Math.floor((generatedNoise[i][j] / 1000) * 256);
+      const value = generatedNoise[i][j]
       imageDataArray[index] = value;
       imageDataArray[index + 1] = value;
       imageDataArray[index + 2] = value;

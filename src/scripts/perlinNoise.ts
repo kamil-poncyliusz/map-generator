@@ -13,7 +13,7 @@ function scaleWithBilinearInterpolation(
   octave: number
 ): number[][] {
   const size = base.length;
-  const layer = filled2dArray(size);
+  const layer = filled2dArray(size, 0);
   const ratio = Math.pow(2, octave);
   for (let x = 0; x < size / ratio; x++) {
     for (let y = 0; y < size / ratio; y++) {
@@ -57,7 +57,7 @@ function cubicInterpolation(
 
 function scaleWithBicubicInterpolation(base: number[][], octave: number) {
   const size = base.length;
-  const layer = filled2dArray(size);
+  const layer = filled2dArray(size, 0);
   const scale = Math.pow(2, octave);
   if (size % scale !== 0) throw new Error("Size must be divisible by scale");
   const baseSize = size / scale;
@@ -117,7 +117,7 @@ export function perlinNoise(params:PerlinNoiseParams): number[][] {
   const { seed, size, firstOctave, lastOctave, interpolationMethod } = params;
   const octaves = lastOctave - firstOctave + 1;
   const layers = [];
-  layers.push(random2dArray(seed, size));
+  layers.push(random2dArray(seed, size, 255));
   const getLayer = getLayerInterpolation(interpolationMethod);
   for (let octave = 1; octave < lastOctave; octave++) {
     const layer = getLayer(layers[0], octave);
@@ -193,3 +193,64 @@ export function landMatrix(matrix:number[][], landPercentage:number): boolean[][
   }
   return result;
 }
+
+
+export function riverFlowMatrix(noise:number[][], waterLevel:number): number[][] {
+  const matrixSize = noise.length;
+  const riverFlowMatrix = filled2dArray(matrixSize, 1);
+  const vectors = [
+    [-1, -1],
+    [1, -1],
+    [1, 1],
+    [-1, 1],
+    [-1, 0],
+    [0, -1],
+    [1, 0],
+    [0, 1],
+    [0, 0]
+  ];
+  for(let level = 255; level >= waterLevel; level--) {
+    for(let x = 0; x < matrixSize; x++) {
+      for(let y = 0; y < matrixSize; y++) {
+        if(noise[x][y] === level) {
+          let biggestDifference = 0;
+          let lowestNeighbourX = x;
+          let lowestNeighbourY = y;
+          for(let i = 0; i < 8; i++) {
+            const [dx, dy] = vectors[i];
+            let neighbourX = x + dx;
+            let neighbourY = y + dy;
+            if(neighbourX < 0) neighbourX = matrixSize - 1;
+            else if(neighbourX >= matrixSize) neighbourX = 0;
+            if(neighbourY < 0) neighbourY = matrixSize - 1;
+            else if(neighbourY >= matrixSize) neighbourY = 0;
+            const difference = noise[x][y] - noise[neighbourX][neighbourY];
+            if(difference >= biggestDifference) {
+              biggestDifference = difference;
+              lowestNeighbourX = neighbourX;
+              lowestNeighbourY = neighbourY;
+            }
+          }
+          riverFlowMatrix[lowestNeighbourX][lowestNeighbourY] += riverFlowMatrix[x][y];
+        }
+      }
+    }
+  }
+  return riverFlowMatrix;
+}
+
+export function landMatrixWithRivers(noise:number[][], landPercentage:number): boolean[][] {
+  const waterThreshold = waterLevel(noise, landPercentage);
+  const riverThreshold = 15;
+  const riverFlow = riverFlowMatrix(noise, waterThreshold);
+  const result: boolean[][] = [];
+  for (let x = 0; x < noise.length; x++) {
+    const row: boolean[] = [];
+    for (let y = 0; y < noise[x].length; y++) {
+      row.push(noise[x][y] >= waterThreshold && riverFlow[x][y] < riverThreshold);
+    }
+    result.push(row);
+  }
+  return result;
+}
+  
