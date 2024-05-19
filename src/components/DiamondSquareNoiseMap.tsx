@@ -1,35 +1,31 @@
 import { useState } from "react";
-import { perlinNoise } from "../scripts/perlin-noise";
 import MapPreviewWindow from "./MapPreviewWindow";
-import { SelectSettingRow, NumberSettingRow, ColorSettingRow } from "./SettingRows";
-import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
+import { NumberSettingRow, ColorSettingRow, FloatSettingRow } from "./SettingRows";
+import { isInRange, isPowerOfTwo } from "../scripts/validators";
 import { parseHexColor } from "../scripts/helpers";
 import { landMatrix } from "../scripts/landmap-generator";
+import { diamondSquareNoise } from "../scripts/diamond-square-noise";
 
-export interface PerlinNoiseMapSettings {
+export interface DiamondSquareNoiseMapSettings {
   seed: number;
   size: number;
-  firstOctave: number;
-  lastOctave: number;
-  interpolationMethod: number;
+  roughness: number;
   landPercentage: number;
   landColor: string;
   waterColor: string;
 }
 
-const defaultPerlinNoiseMapSettings: PerlinNoiseMapSettings = {
+const defaultDiamondSquareNoiseMapSettings: DiamondSquareNoiseMapSettings = {
   seed: 0,
   size: 512,
-  firstOctave: 1,
-  lastOctave: 8,
-  interpolationMethod: 1,
+  roughness: 0.5,
   landPercentage: 30,
   landColor: "#285000",
   waterColor: "#3c7fff",
 };
 
-function imageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
-  const noise = perlinNoise(settings);
+function imageDataFromLandMatrix(settings: DiamondSquareNoiseMapSettings) {
+  const noise = diamondSquareNoise(settings);
   const generatedLand = landMatrix(noise, settings.landPercentage);
   const imageDataArray = new Uint8ClampedArray(settings.size * settings.size * 4);
   const landColor = parseHexColor(settings.landColor);
@@ -47,9 +43,9 @@ function imageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
   return new ImageData(imageDataArray, settings.size, settings.size);
 }
 
-function PerlinNoiseMap() {
-  const [settings, setSettings] = useState({ ...defaultPerlinNoiseMapSettings });
-  const changeSetting = (settingName: keyof PerlinNoiseMapSettings) => {
+function DiamondSquareNoiseMap() {
+  const [settings, setSettings] = useState({ ...defaultDiamondSquareNoiseMapSettings });
+  const changeSetting = (settingName: keyof DiamondSquareNoiseMapSettings) => {
     return (newValue: number | string | boolean) => {
       if (settings[settingName] !== newValue)
         setSettings((previousValue) => ({
@@ -63,24 +59,23 @@ function PerlinNoiseMap() {
   return (
     <div id="generator-wrapper">
       <div id="controls-window">
-        <NumberSettingRow labelText="Seed" value={settings["seed"]} changeHandler={changeSetting("seed")} isValid={isInRange(0, 1000000)} />
+        <NumberSettingRow
+          labelText="Seed"
+          value={settings["seed"]}
+          changeHandler={changeSetting("seed")}
+          isValid={isInRange(0, 1000000)}
+        />
         <NumberSettingRow
           labelText="Size"
           value={settings["size"]}
           changeHandler={changeSetting("size")}
-          isValid={isDivisibleByPowerOfTwo(settings.lastOctave)}
+          isValid={isPowerOfTwo}
         />
-        <NumberSettingRow
-          labelText="First octave"
-          value={settings["firstOctave"]}
-          changeHandler={changeSetting("firstOctave")}
-          isValid={isInRange(1, settings.lastOctave)}
-        />
-        <NumberSettingRow
-          labelText="Last octave"
-          value={settings["lastOctave"]}
-          changeHandler={changeSetting("lastOctave")}
-          isValid={isInRange(settings.firstOctave, highestPowerOfTwoFactor(settings.size))}
+        <FloatSettingRow
+          labelText="Roughness"
+          value={settings["roughness"]}
+          changeHandler={changeSetting("roughness")}
+          isValid={isInRange(0, 1)}
         />
         <NumberSettingRow
           labelText="Land percentage"
@@ -88,14 +83,15 @@ function PerlinNoiseMap() {
           changeHandler={changeSetting("landPercentage")}
           isValid={isInRange(0, 100)}
         />
-        <ColorSettingRow labelText="Land color" value={settings["landColor"]} changeHandler={changeSetting("landColor")} />
-        <ColorSettingRow labelText="Water color" value={settings["waterColor"]} changeHandler={changeSetting("waterColor")} />
-        <SelectSettingRow
-          labelText="Interpolation"
-          options={["Bilinear", "Bicubic"]}
-          value={settings["interpolationMethod"]}
-          changeHandler={changeSetting("interpolationMethod")}
-          isValid={isInRange(0, 1)}
+        <ColorSettingRow
+          labelText="Land color"
+          value={settings["landColor"]}
+          changeHandler={changeSetting("landColor")}
+        />
+        <ColorSettingRow
+          labelText="Water color"
+          value={settings["waterColor"]}
+          changeHandler={changeSetting("waterColor")}
         />
       </div>
       <MapPreviewWindow imageData={imageData} />
@@ -103,4 +99,4 @@ function PerlinNoiseMap() {
   );
 }
 
-export default PerlinNoiseMap;
+export default DiamondSquareNoiseMap;

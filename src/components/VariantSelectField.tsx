@@ -15,6 +15,7 @@ export function VariantSelectField({ changeHandler }: { changeHandler: (newValue
         <option value="1">Perlin Noise Map</option>
         <option value="2">Perlin Noise</option>
         <option value="3">Cellular Automata Map</option>
+        <option value="4">Diamond Square Noise Map</option>
       </select>
     </div>
   );

@@ -37,11 +37,7 @@ interface ButtonSettingRowProps extends SettingRowProps {
   clickHandler: () => void;
 }
 
-export function CheckboxSettingRow({
-  labelText,
-  value = false,
-  changeHandler,
-}: CheckboxSettingRowProps) {
+export function CheckboxSettingRow({ labelText, value = false, changeHandler }: CheckboxSettingRowProps) {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     changeHandler(target.checked);
@@ -54,18 +50,9 @@ export function CheckboxSettingRow({
   );
 }
 
-export function NumberSettingRow({
-  labelText,
-  value,
-  changeHandler,
-  isValid,
-}: NumberSettingRowProps) {
+export function NumberSettingRow({ labelText, value, changeHandler, isValid }: NumberSettingRowProps) {
   const [inputValue, setInputValue] = useState(value);
-  function applyChange(
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLInputElement>
-  ) {
+  function applyChange(e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     const newValue = parseInt(target.value);
     if (isValid(newValue)) changeHandler(newValue);
@@ -80,7 +67,7 @@ export function NumberSettingRow({
   function increaseValue(e: React.KeyboardEvent<HTMLInputElement>) {
     e.preventDefault();
     const oldValue = parseInt(e.currentTarget.value);
-    for (let i = 1; i < 1000; i++) {
+    for (let i = 1; i < 2000; i++) {
       const newValue = oldValue + i;
       if (isValid(newValue)) {
         setInputValue(newValue);
@@ -91,7 +78,7 @@ export function NumberSettingRow({
   function decreaseValue(e: React.KeyboardEvent<HTMLInputElement>) {
     e.preventDefault();
     const oldValue = parseInt(e.currentTarget.value);
-    for (let i = 1; i < 1000; i++) {
+    for (let i = 1; i < 2000; i++) {
       const newValue = oldValue - i;
       if (isValid(newValue)) {
         setInputValue(newValue);
@@ -108,29 +95,14 @@ export function NumberSettingRow({
   return (
     <div className="setting-row">
       <label>{labelText}</label>
-      <input
-        type="number"
-        onBlur={applyChange}
-        onInput={handleInput}
-        onKeyDown={handleKeyDown}
-        value={inputValue}
-      />
+      <input type="number" onBlur={applyChange} onInput={handleInput} onKeyDown={handleKeyDown} value={inputValue} />
     </div>
   );
 }
 
-export function FloatSettingRow({
-  labelText,
-  value,
-  changeHandler,
-  isValid,
-}: FloatSettingRowProps) {
+export function FloatSettingRow({ labelText, value, changeHandler, isValid }: FloatSettingRowProps) {
   const [inputValue, setInputValue] = useState(value);
-  function applyChange(
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLInputElement>
-  ) {
+  function applyChange(e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     const newValue = parseFloat(target.value);
     if (isValid(newValue)) changeHandler(newValue);
@@ -173,24 +145,12 @@ export function FloatSettingRow({
   return (
     <div className="setting-row">
       <label>{labelText}</label>
-      <input
-        type="number"
-        onBlur={applyChange}
-        onInput={handleInput}
-        onKeyDown={handleKeyDown}
-        value={inputValue}
-      />
+      <input type="number" onBlur={applyChange} onInput={handleInput} onKeyDown={handleKeyDown} value={inputValue} />
     </div>
   );
 }
 
-export function SelectSettingRow({
-  labelText,
-  options,
-  value,
-  changeHandler,
-  isValid,
-}: SelectSettingRowProps) {
+export function SelectSettingRow({ labelText, options, value, changeHandler, isValid }: SelectSettingRowProps) {
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const target = e.target as HTMLSelectElement;
     const newValue = parseInt(target.value);
@@ -210,11 +170,7 @@ export function SelectSettingRow({
   );
 }
 
-export function ColorSettingRow({
-  labelText,
-  value,
-  changeHandler,
-}: ColorSettingRowProps) {
+export function ColorSettingRow({ labelText, value, changeHandler }: ColorSettingRowProps) {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     changeHandler(target.value);
@@ -227,10 +183,7 @@ export function ColorSettingRow({
   );
 }
 
-export function ButtonSettingRow({
-  labelText,
-  clickHandler,
-}: ButtonSettingRowProps) {
+export function ButtonSettingRow({ labelText, clickHandler }: ButtonSettingRowProps) {
   return (
     <div className="setting-row">
       <button onClick={clickHandler}>{labelText}</button>

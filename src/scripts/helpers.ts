@@ -4,14 +4,24 @@ interface ParsedColor {
   b: number;
 }
 
+export class Randomizer {
+  private seed: number;
+  constructor(seed: number) {
+    this.seed = seed;
+  }
+  next() {
+    this.seed = (this.seed * 9301 + 49297) % 233280;
+    return this.seed / 233280;
+  }
+}
+
 export function random2dArray(seed: number, size: number, limit: number): number[][] {
-  let n = seed;
+  const random = new Randomizer(seed);
   const result: number[][] = [];
   for (let i = 0; i < size; i++) {
     const row: number[] = [];
     for (let j = 0; j < size; j++) {
-      n = (n * 9301 + 49297) % 233280;
-      const randomNumber = Math.floor((n / 233280) * (limit + 1));
+      const randomNumber = Math.floor(random.next() * limit);
       row.push(randomNumber);
     }
     result.push(row);

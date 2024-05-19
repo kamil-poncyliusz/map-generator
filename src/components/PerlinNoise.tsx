@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { perlinNoise } from "../scripts/perlin-noise";
 import MapPreviewWindow from "./MapPreviewWindow";
-import {
-  SelectSettingRow,
-  NumberSettingRow,
-} from "./SettingRows";
+import { SelectSettingRow, NumberSettingRow } from "./SettingRows";
 import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
 
 export interface PerlinNoiseSettings {
@@ -25,13 +22,11 @@ const defaultPerlinNoiseSetting: PerlinNoiseSettings = {
 
 function imageDataFromNoise(settings: PerlinNoiseSettings) {
   const generatedNoise = perlinNoise(settings);
-  const imageDataArray = new Uint8ClampedArray(
-    settings.size * settings.size * 4
-  );
+  const imageDataArray = new Uint8ClampedArray(settings.size * settings.size * 4);
   for (let i = 0; i < settings.size; i++) {
     for (let j = 0; j < settings.size; j++) {
       const index = (i * settings.size + j) * 4;
-      const value = generatedNoise[i][j]
+      const value = generatedNoise[i][j];
       imageDataArray[index] = value;
       imageDataArray[index + 1] = value;
       imageDataArray[index + 2] = value;
@@ -79,10 +74,7 @@ function PerlinNoise() {
           labelText="Last octave"
           value={settings["lastOctave"]}
           changeHandler={changeSetting("lastOctave")}
-          isValid={isInRange(
-            settings.firstOctave,
-            highestPowerOfTwoFactor(settings.size)
-          )}
+          isValid={isInRange(settings.firstOctave, highestPowerOfTwoFactor(settings.size))}
         />
         <SelectSettingRow
           labelText="Interpolation"
