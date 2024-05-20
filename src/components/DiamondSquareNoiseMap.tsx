@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MapPreviewWindow from "./MapPreviewWindow";
-import { NumberSettingRow, ColorSettingRow, FloatSettingRow } from "./SettingRows";
+import { NumberSettingRow, ColorSettingRow } from "./SettingRows";
 import { isInRange, isPowerOfTwo } from "../scripts/validators";
 import { parseHexColor } from "../scripts/helpers";
 import { landMatrix } from "../scripts/landmap-generator";
@@ -9,7 +9,7 @@ import { diamondSquareNoise } from "../scripts/diamond-square-noise";
 export interface DiamondSquareNoiseMapSettings {
   seed: number;
   size: number;
-  roughness: number;
+  fragmentation: number;
   landPercentage: number;
   landColor: string;
   waterColor: string;
@@ -18,7 +18,7 @@ export interface DiamondSquareNoiseMapSettings {
 const defaultDiamondSquareNoiseMapSettings: DiamondSquareNoiseMapSettings = {
   seed: 0,
   size: 512,
-  roughness: 0.5,
+  fragmentation: 0,
   landPercentage: 30,
   landColor: "#285000",
   waterColor: "#3c7fff",
@@ -71,11 +71,11 @@ function DiamondSquareNoiseMap() {
           changeHandler={changeSetting("size")}
           isValid={isPowerOfTwo}
         />
-        <FloatSettingRow
-          labelText="Roughness"
-          value={settings["roughness"]}
-          changeHandler={changeSetting("roughness")}
-          isValid={isInRange(0, 1)}
+        <NumberSettingRow
+          labelText="Fragmentation"
+          value={settings["fragmentation"]}
+          changeHandler={changeSetting("fragmentation")}
+          isValid={isInRange(0, 100)}
         />
         <NumberSettingRow
           labelText="Land percentage"

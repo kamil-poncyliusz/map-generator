@@ -57,7 +57,14 @@ function MapPreviewWindow({ imageData }: MapPreviewWindowProps) {
   return (
     <div id="map-preview-window">
       <div id="canvas-dragarea">
-        <div id="canvas-draggable-wrapper" ref={draggableRef} onMouseDown={dragStart} onMouseUp={dragEnd} onMouseMove={dragMove} onMouseLeave={dragEnd}>
+        <div
+          id="canvas-draggable-wrapper"
+          ref={draggableRef}
+          onMouseDown={dragStart}
+          onMouseUp={dragEnd}
+          onMouseMove={dragMove}
+          onMouseLeave={dragEnd}
+        >
           <MapCanvas imageData={imageData} scaleExponent={scaleExponent} />
         </div>
       </div>

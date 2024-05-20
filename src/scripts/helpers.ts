@@ -4,19 +4,25 @@ interface ParsedColor {
   b: number;
 }
 
-export class Randomizer {
+export class LCG {
   private seed: number;
+  private modulus: number;
+  private multiplier: number;
+  private increment: number;
   constructor(seed: number) {
     this.seed = seed;
+    this.modulus = 233280;
+    this.multiplier = 9301;
+    this.increment = 49297;
   }
-  next() {
-    this.seed = (this.seed * 9301 + 49297) % 233280;
-    return this.seed / 233280;
+  public next(): number {
+    this.seed = (this.multiplier * this.seed + this.increment) % this.modulus;
+    return this.seed / this.modulus;
   }
 }
 
 export function random2dArray(seed: number, size: number, limit: number): number[][] {
-  const random = new Randomizer(seed);
+  const random = new LCG(seed);
   const result: number[][] = [];
   for (let i = 0; i < size; i++) {
     const row: number[] = [];
@@ -29,10 +35,10 @@ export function random2dArray(seed: number, size: number, limit: number): number
   return result;
 }
 
-export function filled2dArray(size: number, value: number): number[][] {
-  const result: number[][] = [];
+export function filled2dArray<T>(size: number, value: T): T[][] {
+  const result: T[][] = [];
   for (let i = 0; i < size; i++) {
-    const row: number[] = [];
+    const row: T[] = [];
     for (let j = 0; j < size; j++) {
       row.push(value);
     }

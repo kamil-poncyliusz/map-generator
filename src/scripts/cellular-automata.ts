@@ -1,4 +1,4 @@
-import { Randomizer } from "./helpers";
+import { LCG, filled2dArray } from "./helpers";
 
 interface CellularAutomataSettings {
   size: number;
@@ -10,16 +10,13 @@ interface CellularAutomataSettings {
 
 export function cellularAutomata(settings: CellularAutomataSettings) {
   const { size, seed, iterations, deathThreshold, initialDensity } = settings;
-  const limit = 1000;
-  const random = new Randomizer(seed);
-  let grid: boolean[][] = [];
-  for (let i = 0; i < size; i++) {
-    const row: boolean[] = [];
-    for (let j = 0; j < size; j++) {
-      const randomNumber = Math.floor(random.next() * limit);
-      row.push(randomNumber < initialDensity * limit ? true : false);
+  const random = new LCG(seed);
+  let grid: boolean[][] = filled2dArray(size, false);
+  for (let x = 0; x < size; x++) {
+    for (let y = 0; y < size; y++) {
+      const randomNumber = random.next();
+      grid[x][y] = randomNumber < initialDensity ? true : false;
     }
-    grid.push(row);
   }
   for (let i = 0; i < iterations; i++) {
     const newGrid: boolean[][] = [];

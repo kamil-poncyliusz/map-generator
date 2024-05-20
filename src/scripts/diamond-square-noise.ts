@@ -1,21 +1,28 @@
-import { Randomizer, filled2dArray } from "./helpers";
+import { LCG, filled2dArray } from "./helpers";
 import { isPowerOfTwo } from "./validators";
 
 interface DiamondSquareNoiseParams {
   seed: number;
   size: number;
-  roughness: number;
+  fragmentation: number;
 }
-export function diamondSquareNoise({ seed, size, roughness }: DiamondSquareNoiseParams): number[][] {
+export function diamondSquareNoise({ seed, size, fragmentation }: DiamondSquareNoiseParams): number[][] {
   if (!isPowerOfTwo(size)) throw new Error("Size must be a power of 2");
   const map = filled2dArray(size, 0);
-  const random = new Randomizer(seed);
+  const random = new LCG(seed);
   map[0][0] = random.next();
   let side = size;
+  let roughness = 1;
+  let extraInitialSteps = fragmentation;
   while (side > 1) {
     const halfSide = side / 2;
     for (let x = 0; x < size; x += side) {
       for (let y = 0; y < size; y += side) {
+        if (extraInitialSteps > 0) {
+          map[x + halfSide][y + halfSide] = map[0][0];
+          extraInitialSteps--;
+          continue;
+        }
         const average =
           (map[x][y] +
             map[(x + side) % size][y] +
@@ -27,6 +34,11 @@ export function diamondSquareNoise({ seed, size, roughness }: DiamondSquareNoise
     }
     for (let x = 0; x < size; x += halfSide) {
       for (let y = (x + halfSide) % side; y < size; y += side) {
+        if (extraInitialSteps > 0) {
+          map[x][y] = map[0][0];
+          extraInitialSteps--;
+          continue;
+        }
         const average =
           (map[(x - halfSide + size) % size][y] +
             map[(x + halfSide) % size][y] +

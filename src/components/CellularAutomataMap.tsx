@@ -1,10 +1,6 @@
 import { useState } from "react";
 import MapPreviewWindow from "./MapPreviewWindow";
-import {
-  ColorSettingRow,
-  FloatSettingRow,
-  NumberSettingRow,
-} from "./SettingRows";
+import { ColorSettingRow, FloatSettingRow, NumberSettingRow } from "./SettingRows";
 import { isInRange } from "../scripts/validators";
 import { cellularAutomata } from "../scripts/cellular-automata";
 import { parseHexColor } from "../scripts/helpers";
@@ -31,9 +27,7 @@ const defaultSettings: CellularAutomataMapSettings = {
 
 function imageDataFromLandMatrix(settings: CellularAutomataMapSettings) {
   const generatedLandMatrix = cellularAutomata(settings);
-  const imageDataArray = new Uint8ClampedArray(
-    settings.size * settings.size * 4
-  );
+  const imageDataArray = new Uint8ClampedArray(settings.size * settings.size * 4);
   const landColor = parseHexColor(settings.landColor);
   const waterColor = parseHexColor(settings.waterColor);
   for (let i = 0; i < settings.size; i++) {
