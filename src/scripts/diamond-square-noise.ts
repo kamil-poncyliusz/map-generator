@@ -1,4 +1,5 @@
 import { LCG, filled2dArray } from "./helpers";
+import { normalizeMatrix } from "./landmap-generator";
 import { isPowerOfTwo } from "./validators";
 
 interface DiamondSquareNoiseParams {
@@ -51,19 +52,6 @@ export function diamondSquareNoise({ seed, size, fragmentation }: DiamondSquareN
     side /= 2;
     roughness /= 2;
   }
-  let min = map[0][0];
-  let max = map[0][0];
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
-      if (map[i][j] < min) min = map[i][j];
-      if (map[i][j] > max) max = map[i][j];
-    }
-  }
-  const range = max - min;
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
-      map[i][j] = Math.floor(((map[i][j] - min) / range) * 255);
-    }
-  }
+  normalizeMatrix(map, 0, 255);
   return map;
 }

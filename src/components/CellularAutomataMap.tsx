@@ -5,6 +5,12 @@ import { isInRange } from "../scripts/validators";
 import { cellularAutomata } from "../scripts/cellular-automata";
 import { parseHexColor } from "../scripts/helpers";
 
+const MAX_SIZE = 10000;
+const MAX_ITERATIONS = 100;
+const MAX_DEATH_THRESHOLD = 8;
+const MAX_INITIAL_DENSITY = 1;
+const MAX_SEED = 1000000;
+
 interface CellularAutomataMapSettings {
   size: number;
   seed: number;
@@ -63,31 +69,31 @@ function CellularAutomataMap() {
           labelText="Seed"
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
-          isValid={isInRange(0, 1000000)}
+          isValid={isInRange(0, MAX_SEED)}
         />
         <NumberSettingRow
           labelText="Size"
           value={settings["size"]}
           changeHandler={changeSetting("size")}
-          isValid={isInRange(0, 5000)}
+          isValid={isInRange(0, MAX_SIZE)}
         />
         <NumberSettingRow
           labelText="Iterations"
           value={settings["iterations"]}
           changeHandler={changeSetting("iterations")}
-          isValid={isInRange(0, 100)}
+          isValid={isInRange(0, MAX_ITERATIONS)}
         />
         <NumberSettingRow
           labelText="Death Threshold"
           value={settings["deathThreshold"]}
           changeHandler={changeSetting("deathThreshold")}
-          isValid={isInRange(0, 8)}
+          isValid={isInRange(0, MAX_DEATH_THRESHOLD)}
         />
         <FloatSettingRow
           labelText="Initial Density"
           value={settings["initialDensity"]}
           changeHandler={changeSetting("initialDensity")}
-          isValid={isInRange(0, 1)}
+          isValid={isInRange(0, MAX_INITIAL_DENSITY)}
         />
         <ColorSettingRow
           labelText="Land Color"

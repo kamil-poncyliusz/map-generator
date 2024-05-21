@@ -1,4 +1,5 @@
 import { filled2dArray, random2dArray } from "./helpers";
+import { normalizeMatrix } from "./landmap-generator";
 
 interface PerlinNoiseParams {
   seed: number;
@@ -8,10 +9,7 @@ interface PerlinNoiseParams {
   interpolationMethod: number;
 }
 
-function scaleWithBilinearInterpolation(
-  base: number[][],
-  octave: number
-): number[][] {
+function scaleWithBilinearInterpolation(base: number[][], octave: number): number[][] {
   const size = base.length;
   const layer = filled2dArray(size, 0);
   const ratio = Math.pow(2, octave);
@@ -20,11 +18,7 @@ function scaleWithBilinearInterpolation(
       layer[ratio * x][ratio * y] = base[x][y];
     }
   }
-  for (
-    let distance = ratio / 2;
-    distance > 0;
-    distance = Math.floor(distance / 2)
-  ) {
+  for (let distance = ratio / 2; distance > 0; distance = Math.floor(distance / 2)) {
     const doubleDistance = distance * 2;
     for (let x = 0; x < size; x += doubleDistance) {
       for (let y = 0; y < size; y += doubleDistance) {
@@ -32,22 +26,14 @@ function scaleWithBilinearInterpolation(
         const x1 = x + doubleDistance == size ? 0 : x + doubleDistance;
         layer[x][y + distance] = Math.round((layer[x][y] + layer[x][y1]) / 2);
         layer[x + distance][y] = Math.round((layer[x][y] + layer[x1][y]) / 2);
-        layer[x + distance][y + distance] = Math.round(
-          (layer[x][y] + layer[x][y1] + layer[x1][y] + layer[x1][y1]) / 4
-        );
+        layer[x + distance][y + distance] = Math.round((layer[x][y] + layer[x][y1] + layer[x1][y] + layer[x1][y1]) / 4);
       }
     }
   }
   return layer;
 }
 
-function cubicInterpolation(
-  a: number,
-  b: number,
-  c: number,
-  d: number,
-  x: number
-) {
+function cubicInterpolation(a: number, b: number, c: number, d: number, x: number) {
   const p = d - c - (a - b);
   const q = a - b - p;
   const r = c - a;
@@ -94,13 +80,7 @@ function scaleWithBicubicInterpolation(base: number[][], octave: number) {
       if (d >= size) d -= size;
       for (let j = 1; j < scale; j++) {
         const yRatio = j / scale;
-        layer[x][y + j] = cubicInterpolation(
-          layer[x][a],
-          layer[x][b],
-          layer[x][c],
-          layer[x][d],
-          yRatio
-        );
+        layer[x][y + j] = cubicInterpolation(layer[x][a], layer[x][b], layer[x][c], layer[x][d], yRatio);
       }
     }
   }
@@ -117,7 +97,7 @@ export function perlinNoise(params: PerlinNoiseParams): number[][] {
   const { seed, size, firstOctave, lastOctave, interpolationMethod } = params;
   const octaves = lastOctave - firstOctave + 1;
   const layers = [];
-  layers.push(random2dArray(seed, size, 255));
+  layers.push(random2dArray(seed, size, 1000));
   const getLayer = getLayerInterpolation(interpolationMethod);
   for (let octave = 1; octave < lastOctave; octave++) {
     const layer = getLayer(layers[0], octave);
@@ -137,5 +117,6 @@ export function perlinNoise(params: PerlinNoiseParams): number[][] {
     }
     result.push(row);
   }
+  normalizeMatrix(result, 0, 255);
   return result;
 }

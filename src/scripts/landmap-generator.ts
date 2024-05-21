@@ -1,6 +1,6 @@
 import { filled2dArray } from "./helpers";
 
-function matrixValuesRange(matrix: number[][]): [number, number] {
+export function matrixValuesRange(matrix: number[][]): [number, number] {
   let min = matrix[0][0];
   let max = matrix[0][0];
   for (let x = 0; x < matrix.length; x++) {
@@ -10,6 +10,17 @@ function matrixValuesRange(matrix: number[][]): [number, number] {
     }
   }
   return [min, max];
+}
+
+export function normalizeMatrix(matrix: number[][], min: number, max: number) {
+  const [matrixMin, matrixMax] = matrixValuesRange(matrix);
+  const matrixRange = matrixMax - matrixMin;
+  const newRange = max - min;
+  for (let x = 0; x < matrix.length; x++) {
+    for (let y = 0; y < matrix[x].length; y++) {
+      matrix[x][y] = Math.round(((matrix[x][y] - matrixMin) / matrixRange) * newRange + min);
+    }
+  }
 }
 
 function layerHistogram(matrix: number[][]): number[] {
@@ -54,7 +65,6 @@ export function landMatrix(matrix: number[][], landPercentage: number): boolean[
   return result;
 }
 
-
 export function riverFlowMatrix(noise: number[][], waterLevel: number): number[][] {
   const matrixSize = noise.length;
   const riverFlowMatrix = filled2dArray(matrixSize, 1);
@@ -67,7 +77,7 @@ export function riverFlowMatrix(noise: number[][], waterLevel: number): number[]
     [0, -1],
     [1, 0],
     [0, 1],
-    [0, 0]
+    [0, 0],
   ];
   for (let level = 255; level >= waterLevel; level--) {
     for (let x = 0; x < matrixSize; x++) {

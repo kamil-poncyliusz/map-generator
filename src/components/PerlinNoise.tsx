@@ -4,6 +4,8 @@ import MapPreviewWindow from "./MapPreviewWindow";
 import { SelectSettingRow, NumberSettingRow } from "./SettingRows";
 import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
 
+const MAX_SEED = 1000000;
+
 export interface PerlinNoiseSettings {
   seed: number;
   size: number;
@@ -56,7 +58,7 @@ function PerlinNoise() {
           labelText="Seed"
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
-          isValid={isInRange(0, 1000000)}
+          isValid={isInRange(0, MAX_SEED)}
         />
         <NumberSettingRow
           labelText="Size"

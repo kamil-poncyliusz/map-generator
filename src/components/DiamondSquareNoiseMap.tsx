@@ -6,6 +6,10 @@ import { parseHexColor } from "../scripts/helpers";
 import { landMatrix } from "../scripts/landmap-generator";
 import { diamondSquareNoise } from "../scripts/diamond-square-noise";
 
+const MAX_SEED = 1000000;
+const MAX_FRAGMENTATION = 1000;
+const MAX_LAND_PERCENTAGE = 100;
+
 export interface DiamondSquareNoiseMapSettings {
   seed: number;
   size: number;
@@ -63,7 +67,7 @@ function DiamondSquareNoiseMap() {
           labelText="Seed"
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
-          isValid={isInRange(0, 1000000)}
+          isValid={isInRange(0, MAX_SEED)}
         />
         <NumberSettingRow
           labelText="Size"
@@ -75,13 +79,13 @@ function DiamondSquareNoiseMap() {
           labelText="Fragmentation"
           value={settings["fragmentation"]}
           changeHandler={changeSetting("fragmentation")}
-          isValid={isInRange(0, 100)}
+          isValid={isInRange(0, MAX_FRAGMENTATION)}
         />
         <NumberSettingRow
           labelText="Land percentage"
           value={settings["landPercentage"]}
           changeHandler={changeSetting("landPercentage")}
-          isValid={isInRange(0, 100)}
+          isValid={isInRange(0, MAX_LAND_PERCENTAGE)}
         />
         <ColorSettingRow
           labelText="Land color"

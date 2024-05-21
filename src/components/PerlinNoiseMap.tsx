@@ -6,6 +6,9 @@ import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../
 import { parseHexColor } from "../scripts/helpers";
 import { landMatrix } from "../scripts/landmap-generator";
 
+const MAX_SEED = 1000000;
+const MAX_LAND_PERCENTAGE = 100;
+
 export interface PerlinNoiseMapSettings {
   seed: number;
   size: number;
@@ -63,7 +66,12 @@ function PerlinNoiseMap() {
   return (
     <div id="generator-wrapper">
       <div id="controls-window">
-        <NumberSettingRow labelText="Seed" value={settings["seed"]} changeHandler={changeSetting("seed")} isValid={isInRange(0, 1000000)} />
+        <NumberSettingRow
+          labelText="Seed"
+          value={settings["seed"]}
+          changeHandler={changeSetting("seed")}
+          isValid={isInRange(0, MAX_SEED)}
+        />
         <NumberSettingRow
           labelText="Size"
           value={settings["size"]}
@@ -86,10 +94,18 @@ function PerlinNoiseMap() {
           labelText="Land percentage"
           value={settings["landPercentage"]}
           changeHandler={changeSetting("landPercentage")}
-          isValid={isInRange(0, 100)}
+          isValid={isInRange(0, MAX_LAND_PERCENTAGE)}
         />
-        <ColorSettingRow labelText="Land color" value={settings["landColor"]} changeHandler={changeSetting("landColor")} />
-        <ColorSettingRow labelText="Water color" value={settings["waterColor"]} changeHandler={changeSetting("waterColor")} />
+        <ColorSettingRow
+          labelText="Land color"
+          value={settings["landColor"]}
+          changeHandler={changeSetting("landColor")}
+        />
+        <ColorSettingRow
+          labelText="Water color"
+          value={settings["waterColor"]}
+          changeHandler={changeSetting("waterColor")}
+        />
         <SelectSettingRow
           labelText="Interpolation"
           options={["Bilinear", "Bicubic"]}
