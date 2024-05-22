@@ -11,11 +11,14 @@ export function VariantSelectField({ changeHandler }: { changeHandler: (newValue
   return (
     <div id="variant-selection-wrapper">
       <select name="variant-select" id="variant-select" value={selectedValue} onChange={handleChange}>
-        <option value="0" disabled>Select a variant</option>
+        <option value="0" disabled>
+          Select a variant
+        </option>
         <option value="1">Perlin Noise Map</option>
         <option value="2">Perlin Noise</option>
         <option value="3">Cellular Automata Map</option>
         <option value="4">Diamond Square Noise Map</option>
+        <option value="5">Diamond Square Noise</option>
       </select>
     </div>
   );

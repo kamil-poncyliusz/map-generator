@@ -5,6 +5,7 @@ import PerlinNoise from "./components/PerlinNoise";
 import PerlinNoiseMap from "./components/PerlinNoiseMap";
 import { VariantSelectField } from "./components/VariantSelectField";
 import DiamondSquareNoiseMap from "./components/DiamondSquareNoiseMap";
+import DiamondSquareNoise from "./components/DiamondSquareNoise";
 
 function App() {
   const [mapVariant, setMapVariant] = useState(0);
@@ -14,7 +15,7 @@ function App() {
         <div id="controls-window"></div>
         <div id="map-preview-window"></div>
       </div>
-    )
+    );
   }
   const mapVariantComponents = [
     EmptyVariant,
@@ -22,6 +23,7 @@ function App() {
     PerlinNoise,
     CellularAutomataMap,
     DiamondSquareNoiseMap,
+    DiamondSquareNoise,
   ];
   const changeMapVariant = (newValue: number) => {
     if (newValue < 0 || newValue >= mapVariantComponents.length) return;
