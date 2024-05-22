@@ -52,7 +52,7 @@ function MapPreviewWindow({ imageData }: MapPreviewWindowProps) {
     const elementHeight = draggableRef.current.offsetHeight;
     draggableRef.current.style.left = `${(parentWidth - elementWidth) / 2}px`;
     draggableRef.current.style.top = `${(parentHeight - elementHeight) / 2}px`;
-  }, []);
+  }, [imageData]);
 
   return (
     <div id="map-preview-window">

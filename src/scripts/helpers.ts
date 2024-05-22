@@ -47,9 +47,9 @@ export function filled2dArray<T>(size: number, value: T): T[][] {
   return result;
 }
 
-export const parseHexColor = function (color: string): ParsedColor {
+export function parseHexColor(color: string): ParsedColor {
   const black = { r: 0, g: 0, b: 0 };
   const regex = new RegExp("^#[A-Fa-f0-9]{6}$");
   if (!regex.test(color)) return black;
   return { r: parseInt(color.slice(1, 3), 16), g: parseInt(color.slice(3, 5), 16), b: parseInt(color.slice(5, 7), 16) };
-};
+}

@@ -7,35 +7,30 @@ interface MapCanvasProps {
 
 function MapCanvas({ imageData, scaleExponent }: MapCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const canvasSize = imageData.width;
-  const scale = Math.pow(2, scaleExponent);
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const context = canvas.getContext("2d");
-    if (!context) return;
-    context.imageSmoothingEnabled = false;
-    context.scale(scale, scale);
+    const canvasSize = imageData.width;
+    const scale = Math.pow(2, scaleExponent);
     const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = imageData.width;
-    tempCanvas.height = imageData.height;
-    tempCanvas.getContext("2d")?.putImageData(imageData, 0, 0);
-    const img = new Image();
-    img.src = tempCanvas.toDataURL();
-    const handleLoad = () => {
-      context.drawImage(img, 0, 0);
+    tempCanvas.width = canvasSize;
+    tempCanvas.height = canvasSize;
+    const tempCanvasContext = tempCanvas.getContext("2d");
+    if (!tempCanvasContext) throw new Error("tempCanvasContext is null");
+    tempCanvasContext.putImageData(imageData, 0, 0);
+    const tempImage = new Image();
+    tempImage.onload = () => {
+      if (!canvasRef.current) throw new Error("canvasRef is null");
+      const canvasContext = canvasRef.current.getContext("2d");
+      if (!canvasContext) throw new Error("canvasContext is null");
+      canvasContext.imageSmoothingEnabled = false;
+      canvasContext.drawImage(tempImage, 0, 0, canvasSize * scale, canvasSize * scale);
     };
-    img.addEventListener("load", handleLoad);
-    return () => {
-      img.removeEventListener("load", handleLoad);
-    };
-  });
-
+    tempImage.src = tempCanvas.toDataURL();
+  }, [imageData, scaleExponent]);
   return (
     <canvas
       ref={canvasRef}
-      width={canvasSize * scale}
-      height={canvasSize * scale}
+      width={imageData.width * Math.pow(2, scaleExponent)}
+      height={imageData.width * Math.pow(2, scaleExponent)}
     ></canvas>
   );
 }
