@@ -69,31 +69,31 @@ function CellularAutomataMap() {
           labelText="Seed"
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
-          isValid={isInRange(0, MAX_SEED)}
+          validators={[isInRange(0, MAX_SEED)]}
         />
         <NumberSettingRow
           labelText="Size"
           value={settings["size"]}
           changeHandler={changeSetting("size")}
-          isValid={isInRange(0, MAX_SIZE)}
+          validators={[isInRange(0, MAX_SIZE)]}
         />
         <NumberSettingRow
           labelText="Iterations"
           value={settings["iterations"]}
           changeHandler={changeSetting("iterations")}
-          isValid={isInRange(0, MAX_ITERATIONS)}
+          validators={[isInRange(0, MAX_ITERATIONS)]}
         />
         <NumberSettingRow
           labelText="Death Threshold"
           value={settings["deathThreshold"]}
           changeHandler={changeSetting("deathThreshold")}
-          isValid={isInRange(0, MAX_DEATH_THRESHOLD)}
+          validators={[isInRange(0, MAX_DEATH_THRESHOLD)]}
         />
         <FloatSettingRow
           labelText="Initial Density"
           value={settings["initialDensity"]}
           changeHandler={changeSetting("initialDensity")}
-          isValid={isInRange(0, MAX_INITIAL_DENSITY)}
+          validators={[isInRange(0, MAX_INITIAL_DENSITY)]}
         />
         <ColorSettingRow
           labelText="Land Color"

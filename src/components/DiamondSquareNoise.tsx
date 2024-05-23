@@ -5,6 +5,9 @@ import { isInRange, isPowerOfTwo } from "../scripts/validators";
 import { diamondSquareNoise } from "../scripts/diamond-square-noise";
 
 const MAX_SEED = 1000000;
+const MIN_SIZE = 32;
+const MAX_SIZE = 4096;
+const MIN_FRAGMENTATION = 0;
 const MAX_FRAGMENTATION = 1000;
 
 export interface DiamondSquareNoiseSettings {
@@ -55,19 +58,19 @@ function DiamondSquareNoise() {
           labelText="Seed"
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
-          isValid={isInRange(0, MAX_SEED)}
+          validators={[isInRange(0, MAX_SEED)]}
         />
         <NumberSettingRow
           labelText="Size"
           value={settings["size"]}
           changeHandler={changeSetting("size")}
-          isValid={isPowerOfTwo}
+          validators={[isPowerOfTwo, isInRange(MIN_SIZE, MAX_SIZE)]}
         />
         <NumberSettingRow
           labelText="Fragmentation"
           value={settings["fragmentation"]}
           changeHandler={changeSetting("fragmentation")}
-          isValid={isInRange(0, MAX_FRAGMENTATION)}
+          validators={[isInRange(MIN_FRAGMENTATION, MAX_FRAGMENTATION)]}
         />
       </div>
       <MapPreviewWindow imageData={imageData} />

@@ -12,20 +12,20 @@ interface CheckboxSettingRowProps extends SettingRowProps {
 interface NumberSettingRowProps extends SettingRowProps {
   value: number;
   changeHandler: (newValue: number) => void;
-  isValid: (newValue: number) => boolean;
+  validators: ((newValue: number) => boolean)[];
 }
 
 interface FloatSettingRowProps extends SettingRowProps {
   value: number;
   changeHandler: (newValue: number) => void;
-  isValid: (newValue: number) => boolean;
+  validators: ((newValue: number) => boolean)[];
 }
 
 interface SelectSettingRowProps extends SettingRowProps {
   options: string[];
   value: number;
   changeHandler: (newValue: number) => void;
-  isValid: (newValue: number) => boolean;
+  validators: ((newValue: number) => boolean)[];
 }
 
 interface ColorSettingRowProps extends SettingRowProps {
@@ -50,8 +50,11 @@ export function CheckboxSettingRow({ labelText, value = false, changeHandler }: 
   );
 }
 
-export function NumberSettingRow({ labelText, value, changeHandler, isValid }: NumberSettingRowProps) {
+export function NumberSettingRow({ labelText, value, changeHandler, validators }: NumberSettingRowProps) {
   const [inputValue, setInputValue] = useState(value);
+  function isValid(newValue: number) {
+    return validators.every((validator) => validator(newValue));
+  }
   function applyChange(e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     const newValue = parseInt(target.value);
@@ -100,8 +103,11 @@ export function NumberSettingRow({ labelText, value, changeHandler, isValid }: N
   );
 }
 
-export function FloatSettingRow({ labelText, value, changeHandler, isValid }: FloatSettingRowProps) {
+export function FloatSettingRow({ labelText, value, changeHandler, validators }: FloatSettingRowProps) {
   const [inputValue, setInputValue] = useState(value);
+  function isValid(newValue: number) {
+    return validators.every((validator) => validator(newValue));
+  }
   function applyChange(e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     const newValue = parseFloat(target.value);
@@ -150,7 +156,10 @@ export function FloatSettingRow({ labelText, value, changeHandler, isValid }: Fl
   );
 }
 
-export function SelectSettingRow({ labelText, options, value, changeHandler, isValid }: SelectSettingRowProps) {
+export function SelectSettingRow({ labelText, options, value, changeHandler, validators }: SelectSettingRowProps) {
+  function isValid(newValue: number) {
+    return validators.every((validator) => validator(newValue));
+  }
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const target = e.target as HTMLSelectElement;
     const newValue = parseInt(target.value);

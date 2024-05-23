@@ -5,6 +5,8 @@ import { SelectSettingRow, NumberSettingRow } from "./SettingRows";
 import { highestPowerOfTwoFactor, isDivisibleByPowerOfTwo, isInRange } from "../scripts/validators";
 
 const MAX_SEED = 1000000;
+const MIN_SIZE = 32;
+const MAX_SIZE = 4096;
 
 export interface PerlinNoiseSettings {
   seed: number;
@@ -58,32 +60,32 @@ function PerlinNoise() {
           labelText="Seed"
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
-          isValid={isInRange(0, MAX_SEED)}
+          validators={[isInRange(0, MAX_SEED)]}
         />
         <NumberSettingRow
           labelText="Size"
           value={settings["size"]}
           changeHandler={changeSetting("size")}
-          isValid={isDivisibleByPowerOfTwo(settings.lastOctave)}
+          validators={[isDivisibleByPowerOfTwo(settings.lastOctave), isInRange(MIN_SIZE, MAX_SIZE)]}
         />
         <NumberSettingRow
           labelText="First octave"
           value={settings["firstOctave"]}
           changeHandler={changeSetting("firstOctave")}
-          isValid={isInRange(1, settings.lastOctave)}
+          validators={[isInRange(1, settings.lastOctave)]}
         />
         <NumberSettingRow
           labelText="Last octave"
           value={settings["lastOctave"]}
           changeHandler={changeSetting("lastOctave")}
-          isValid={isInRange(settings.firstOctave, highestPowerOfTwoFactor(settings.size))}
+          validators={[isInRange(settings.firstOctave, highestPowerOfTwoFactor(settings.size))]}
         />
         <SelectSettingRow
           labelText="Interpolation"
           options={["Bilinear", "Bicubic"]}
           value={settings["interpolationMethod"]}
           changeHandler={changeSetting("interpolationMethod")}
-          isValid={isInRange(0, 1)}
+          validators={[isInRange(0, 1)]}
         />
       </div>
       <MapPreviewWindow imageData={imageData} />

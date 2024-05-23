@@ -7,6 +7,9 @@ import { parseHexColor } from "../scripts/helpers";
 import { landMatrix } from "../scripts/landmap-generator";
 
 const MAX_SEED = 1000000;
+const MIN_SIZE = 32;
+const MAX_SIZE = 4096;
+const MIN_LAND_PERCENTAGE = 0;
 const MAX_LAND_PERCENTAGE = 100;
 
 export interface PerlinNoiseMapSettings {
@@ -70,31 +73,31 @@ function PerlinNoiseMap() {
           labelText="Seed"
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
-          isValid={isInRange(0, MAX_SEED)}
+          validators={[isInRange(0, MAX_SEED)]}
         />
         <NumberSettingRow
           labelText="Size"
           value={settings["size"]}
           changeHandler={changeSetting("size")}
-          isValid={isDivisibleByPowerOfTwo(settings.lastOctave)}
+          validators={[isDivisibleByPowerOfTwo(settings.lastOctave), isInRange(MIN_SIZE, MAX_SIZE)]}
         />
         <NumberSettingRow
           labelText="First octave"
           value={settings["firstOctave"]}
           changeHandler={changeSetting("firstOctave")}
-          isValid={isInRange(1, settings.lastOctave)}
+          validators={[isInRange(1, settings.lastOctave)]}
         />
         <NumberSettingRow
           labelText="Last octave"
           value={settings["lastOctave"]}
           changeHandler={changeSetting("lastOctave")}
-          isValid={isInRange(settings.firstOctave, highestPowerOfTwoFactor(settings.size))}
+          validators={[isInRange(settings.firstOctave, highestPowerOfTwoFactor(settings.size))]}
         />
         <NumberSettingRow
           labelText="Land percentage"
           value={settings["landPercentage"]}
           changeHandler={changeSetting("landPercentage")}
-          isValid={isInRange(0, MAX_LAND_PERCENTAGE)}
+          validators={[isInRange(MIN_LAND_PERCENTAGE, MAX_LAND_PERCENTAGE)]}
         />
         <ColorSettingRow
           labelText="Land color"
@@ -111,7 +114,7 @@ function PerlinNoiseMap() {
           options={["Bilinear", "Bicubic"]}
           value={settings["interpolationMethod"]}
           changeHandler={changeSetting("interpolationMethod")}
-          isValid={isInRange(0, 1)}
+          validators={[isInRange(0, 1)]}
         />
       </div>
       <MapPreviewWindow imageData={imageData} />
