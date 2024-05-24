@@ -18,6 +18,17 @@ function MapPreviewWindow({ imageData }: MapPreviewWindowProps) {
     draggableRef.current.style.left = `${currentLeft + shiftX}px`;
     draggableRef.current.style.top = `${currentTop + shiftY}px`;
   }
+  function centerCanvas() {
+    if (!draggableRef.current) return;
+    const parent = draggableRef.current.parentElement;
+    if (!parent) return;
+    const parentWidth = parent.offsetWidth;
+    const parentHeight = parent.offsetHeight;
+    const elementWidth = draggableRef.current.offsetWidth;
+    const elementHeight = draggableRef.current.offsetHeight;
+    draggableRef.current.style.left = `${(parentWidth - elementWidth) / 2}px`;
+    draggableRef.current.style.top = `${(parentHeight - elementHeight) / 2}px`;
+  }
   function zoomIn() {
     const positionShift = -imageData.width * Math.pow(2, scaleExponent - 1);
     setScaleExponent(scaleExponent + 1);
@@ -43,15 +54,9 @@ function MapPreviewWindow({ imageData }: MapPreviewWindowProps) {
     moveCanvas(event.movementX, event.movementY);
   }
   useEffect(() => {
-    if (!draggableRef.current) return;
-    const parent = draggableRef.current.parentElement;
-    if (!parent) return;
-    const parentWidth = parent.offsetWidth;
-    const parentHeight = parent.offsetHeight;
-    const elementWidth = draggableRef.current.offsetWidth;
-    const elementHeight = draggableRef.current.offsetHeight;
-    draggableRef.current.style.left = `${(parentWidth - elementWidth) / 2}px`;
-    draggableRef.current.style.top = `${(parentHeight - elementHeight) / 2}px`;
+    centerCanvas();
+    window.addEventListener("resize", centerCanvas);
+    return () => window.removeEventListener("resize", centerCanvas);
   }, [imageData]);
 
   return (

@@ -25,6 +25,9 @@ function MapCanvas({ imageData, scaleExponent }: MapCanvasProps) {
       canvasContext.drawImage(tempImage, 0, 0, canvasSize * scale, canvasSize * scale);
     };
     tempImage.src = tempCanvas.toDataURL();
+    return () => {
+      tempImage.onload = null;
+    };
   }, [imageData, scaleExponent]);
   return (
     <canvas
