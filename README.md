@@ -20,9 +20,21 @@ Built with:
 
 ## Examples
 
-TBD
+Perlin noise:
 
-<!-- <img src="" alt="map1" width="500" height="500"> -->
+<img src="examples/perlin-noise.png" alt="img1" width="512" height="512">
+
+Perlin noise map:
+
+<img src="examples/perlin-noise-map.png" alt="img2" width="512" height="512">
+
+Diamond square algorithm noise:
+
+<img src="examples/diamond-square-noise.png" alt="img3" width="512" height="512">
+
+Diamond square algorithm noise map:
+
+<img src="examples/diamond-square-noise-map.png" alt="img4" width="512" height="512">
 
 ## Installation
 
