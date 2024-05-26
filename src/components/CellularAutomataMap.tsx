@@ -3,7 +3,7 @@ import MapPreviewWindow from "./MapPreviewWindow";
 import { ColorSettingRow, FloatSettingRow, NumberSettingRow } from "./SettingRows";
 import { isInRange } from "../scripts/validators";
 import { cellularAutomata } from "../scripts/cellular-automata";
-import { parseHexColor } from "../scripts/helpers";
+import { Stringified, parseHexColor } from "../scripts/helpers";
 
 const MAX_SIZE = 10000;
 const MAX_ITERATIONS = 100;
@@ -29,6 +29,16 @@ const defaultSettings: CellularAutomataMapSettings = {
   initialDensity: 0.5,
   landColor: "#285000",
   waterColor: "#3c7fff",
+};
+
+const hoverTexts: Stringified<CellularAutomataMapSettings> = {
+  size: "The size of the map. The map will be square with this size.",
+  seed: "Seed for the random number generator. Changing this will change the map.",
+  iterations: "Number of iterations to run the cellular automata algorithm.",
+  deathThreshold: "",
+  initialDensity: "Probability that a cell will start as land.",
+  landColor: "Color of the land in the map.",
+  waterColor: "Color of the water in the map",
 };
 
 function imageDataFromLandMatrix(settings: CellularAutomataMapSettings) {
@@ -67,41 +77,48 @@ function CellularAutomataMap() {
       <div id="controls-window">
         <NumberSettingRow
           labelText="Seed"
+          hoverText={hoverTexts.seed}
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
           validators={[isInRange(0, MAX_SEED)]}
         />
         <NumberSettingRow
           labelText="Size"
+          hoverText={hoverTexts.size}
           value={settings["size"]}
           changeHandler={changeSetting("size")}
           validators={[isInRange(0, MAX_SIZE)]}
         />
         <NumberSettingRow
           labelText="Iterations"
+          hoverText={hoverTexts.iterations}
           value={settings["iterations"]}
           changeHandler={changeSetting("iterations")}
           validators={[isInRange(0, MAX_ITERATIONS)]}
         />
         <NumberSettingRow
           labelText="Death Threshold"
+          hoverText={hoverTexts.deathThreshold}
           value={settings["deathThreshold"]}
           changeHandler={changeSetting("deathThreshold")}
           validators={[isInRange(0, MAX_DEATH_THRESHOLD)]}
         />
         <FloatSettingRow
           labelText="Initial Density"
+          hoverText={hoverTexts.initialDensity}
           value={settings["initialDensity"]}
           changeHandler={changeSetting("initialDensity")}
           validators={[isInRange(0, MAX_INITIAL_DENSITY)]}
         />
         <ColorSettingRow
           labelText="Land Color"
+          hoverText={hoverTexts.landColor}
           value={settings["landColor"]}
           changeHandler={changeSetting("landColor")}
         />
         <ColorSettingRow
           labelText="Water Color"
+          hoverText={hoverTexts.waterColor}
           value={settings["waterColor"]}
           changeHandler={changeSetting("waterColor")}
         />

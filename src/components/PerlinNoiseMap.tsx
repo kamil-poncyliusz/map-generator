@@ -34,6 +34,18 @@ const defaultPerlinNoiseMapSettings: PerlinNoiseMapSettings = {
   waterColor: "#3c7fff",
 };
 
+const hoverTexts = {
+  seed: "Seed for the random number generator. Changing this will change the map.",
+  size: "The size of the map. The map will be square with this size.",
+  firstOctave: "The first octave of the noise. Generator will skip previous octaves, resulting in a less detailed map.",
+  lastOctave:
+    "The last octave of the noise. Generator will skip later octaves, resulting in smaller continents and islands.",
+  interpolationMethod: "Bicubic interpolation will result in higher quality map, but will be slower.",
+  landPercentage: "The percentage of the map that will be land.",
+  landColor: "The color of the land.",
+  waterColor: "The color of the water.",
+};
+
 function imageDataFromLandMatrix(settings: PerlinNoiseMapSettings) {
   const noise = perlinNoise(settings);
   const generatedLand = landMatrix(noise, settings.landPercentage);
@@ -71,46 +83,54 @@ function PerlinNoiseMap() {
       <div id="controls-window">
         <NumberSettingRow
           labelText="Seed"
+          hoverText={hoverTexts.seed}
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
           validators={[isInRange(0, MAX_SEED)]}
         />
         <NumberSettingRow
           labelText="Size"
+          hoverText={hoverTexts.size}
           value={settings["size"]}
           changeHandler={changeSetting("size")}
           validators={[isDivisibleByPowerOfTwo(settings.lastOctave), isInRange(MIN_SIZE, MAX_SIZE)]}
         />
         <NumberSettingRow
           labelText="First octave"
+          hoverText={hoverTexts.firstOctave}
           value={settings["firstOctave"]}
           changeHandler={changeSetting("firstOctave")}
           validators={[isInRange(1, settings.lastOctave)]}
         />
         <NumberSettingRow
           labelText="Last octave"
+          hoverText={hoverTexts.lastOctave}
           value={settings["lastOctave"]}
           changeHandler={changeSetting("lastOctave")}
           validators={[isInRange(settings.firstOctave, highestPowerOfTwoFactor(settings.size))]}
         />
         <NumberSettingRow
           labelText="Land percentage"
+          hoverText={hoverTexts.landPercentage}
           value={settings["landPercentage"]}
           changeHandler={changeSetting("landPercentage")}
           validators={[isInRange(MIN_LAND_PERCENTAGE, MAX_LAND_PERCENTAGE)]}
         />
         <ColorSettingRow
           labelText="Land color"
+          hoverText={hoverTexts.landColor}
           value={settings["landColor"]}
           changeHandler={changeSetting("landColor")}
         />
         <ColorSettingRow
           labelText="Water color"
+          hoverText={hoverTexts.waterColor}
           value={settings["waterColor"]}
           changeHandler={changeSetting("waterColor")}
         />
         <SelectSettingRow
           labelText="Interpolation"
+          hoverText={hoverTexts.interpolationMethod}
           options={["Bilinear", "Bicubic"]}
           value={settings["interpolationMethod"]}
           changeHandler={changeSetting("interpolationMethod")}

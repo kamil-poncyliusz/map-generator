@@ -3,6 +3,7 @@ import MapPreviewWindow from "./MapPreviewWindow";
 import { NumberSettingRow } from "./SettingRows";
 import { isInRange, isPowerOfTwo } from "../scripts/validators";
 import { diamondSquareNoise } from "../scripts/diamond-square-noise";
+import { Stringified } from "../scripts/helpers";
 
 const MAX_SEED = 1000000;
 const MIN_SIZE = 32;
@@ -20,6 +21,12 @@ const defaultDiamondSquareNoiseSettings: DiamondSquareNoiseSettings = {
   seed: 0,
   size: 512,
   fragmentation: 0,
+};
+
+const hoverTexts: Stringified<DiamondSquareNoiseSettings> = {
+  seed: "Seed for the random number generator.",
+  size: "The size of the noise. The noise will be square with this size. Must be a power of 2.",
+  fragmentation: "Higher fragmentation will result in less smooth noise",
 };
 
 function imageDataFromLandMatrix(settings: DiamondSquareNoiseSettings) {
@@ -56,18 +63,21 @@ function DiamondSquareNoise() {
       <div id="controls-window">
         <NumberSettingRow
           labelText="Seed"
+          hoverText={hoverTexts.seed}
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
           validators={[isInRange(0, MAX_SEED)]}
         />
         <NumberSettingRow
           labelText="Size"
+          hoverText={hoverTexts.size}
           value={settings["size"]}
           changeHandler={changeSetting("size")}
           validators={[isPowerOfTwo, isInRange(MIN_SIZE, MAX_SIZE)]}
         />
         <NumberSettingRow
           labelText="Fragmentation"
+          hoverText={hoverTexts.fragmentation}
           value={settings["fragmentation"]}
           changeHandler={changeSetting("fragmentation")}
           validators={[isInRange(MIN_FRAGMENTATION, MAX_FRAGMENTATION)]}

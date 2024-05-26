@@ -4,6 +4,10 @@ interface ParsedColor {
   b: number;
 }
 
+export type Stringified<T> = {
+  [P in keyof T]: string;
+};
+
 export class LCG {
   private seed: number;
   private modulus: number;

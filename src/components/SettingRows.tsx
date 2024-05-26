@@ -2,6 +2,7 @@ import { useState } from "react";
 
 interface SettingRowProps {
   labelText: string;
+  hoverText: string;
 }
 
 interface CheckboxSettingRowProps extends SettingRowProps {
@@ -37,20 +38,22 @@ interface ButtonSettingRowProps extends SettingRowProps {
   clickHandler: () => void;
 }
 
-export function CheckboxSettingRow({ labelText, value = false, changeHandler }: CheckboxSettingRowProps) {
+export function CheckboxSettingRow({ labelText, hoverText, value = false, changeHandler }: CheckboxSettingRowProps) {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     changeHandler(target.checked);
   }
   return (
     <div className="setting-row">
-      <label>{labelText}</label>
+      <label title={hoverText} className="hover-text">
+        {labelText}
+      </label>
       <input type="checkbox" onChange={handleChange} defaultChecked={value} />
     </div>
   );
 }
 
-export function NumberSettingRow({ labelText, value, changeHandler, validators }: NumberSettingRowProps) {
+export function NumberSettingRow({ labelText, hoverText, value, changeHandler, validators }: NumberSettingRowProps) {
   const [inputValue, setInputValue] = useState(value);
   function isValid(newValue: number) {
     return validators.every((validator) => validator(newValue));
@@ -97,13 +100,15 @@ export function NumberSettingRow({ labelText, value, changeHandler, validators }
   }
   return (
     <div className="setting-row">
-      <label>{labelText}</label>
+      <label title={hoverText} className="hover-text">
+        {labelText}
+      </label>
       <input type="number" onBlur={applyChange} onInput={handleInput} onKeyDown={handleKeyDown} value={inputValue} />
     </div>
   );
 }
 
-export function FloatSettingRow({ labelText, value, changeHandler, validators }: FloatSettingRowProps) {
+export function FloatSettingRow({ labelText, hoverText, value, changeHandler, validators }: FloatSettingRowProps) {
   const [inputValue, setInputValue] = useState(value);
   function isValid(newValue: number) {
     return validators.every((validator) => validator(newValue));
@@ -150,13 +155,22 @@ export function FloatSettingRow({ labelText, value, changeHandler, validators }:
   }
   return (
     <div className="setting-row">
-      <label>{labelText}</label>
+      <label title={hoverText} className="hover-text">
+        {labelText}
+      </label>
       <input type="number" onBlur={applyChange} onInput={handleInput} onKeyDown={handleKeyDown} value={inputValue} />
     </div>
   );
 }
 
-export function SelectSettingRow({ labelText, options, value, changeHandler, validators }: SelectSettingRowProps) {
+export function SelectSettingRow({
+  labelText,
+  hoverText,
+  options,
+  value,
+  changeHandler,
+  validators,
+}: SelectSettingRowProps) {
   function isValid(newValue: number) {
     return validators.every((validator) => validator(newValue));
   }
@@ -167,7 +181,9 @@ export function SelectSettingRow({ labelText, options, value, changeHandler, val
   }
   return (
     <div className="setting-row">
-      <label>{labelText}</label>
+      <label title={hoverText} className="hover-text">
+        {labelText}
+      </label>
       <select onChange={handleChange} value={value}>
         {options.map((option, index) => (
           <option key={option} value={index}>
@@ -179,23 +195,27 @@ export function SelectSettingRow({ labelText, options, value, changeHandler, val
   );
 }
 
-export function ColorSettingRow({ labelText, value, changeHandler }: ColorSettingRowProps) {
+export function ColorSettingRow({ labelText, hoverText, value, changeHandler }: ColorSettingRowProps) {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const target = e.target as HTMLInputElement;
     changeHandler(target.value);
   }
   return (
     <div className="setting-row">
-      <label>{labelText}</label>
+      <label title={hoverText} className="hover-text">
+        {labelText}
+      </label>
       <input type="color" onChange={handleChange} value={value} />
     </div>
   );
 }
 
-export function ButtonSettingRow({ labelText, clickHandler }: ButtonSettingRowProps) {
+export function ButtonSettingRow({ labelText, hoverText, clickHandler }: ButtonSettingRowProps) {
   return (
     <div className="setting-row">
-      <button onClick={clickHandler}>{labelText}</button>
+      <button title={hoverText} className="hover-text" onClick={clickHandler}>
+        {labelText}
+      </button>
     </div>
   );
 }

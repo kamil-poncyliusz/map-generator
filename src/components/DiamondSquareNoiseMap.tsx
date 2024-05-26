@@ -2,7 +2,7 @@ import { useState } from "react";
 import MapPreviewWindow from "./MapPreviewWindow";
 import { NumberSettingRow, ColorSettingRow } from "./SettingRows";
 import { isInRange, isPowerOfTwo } from "../scripts/validators";
-import { parseHexColor } from "../scripts/helpers";
+import { Stringified, parseHexColor } from "../scripts/helpers";
 import { landMatrix } from "../scripts/landmap-generator";
 import { diamondSquareNoise } from "../scripts/diamond-square-noise";
 
@@ -30,6 +30,15 @@ const defaultDiamondSquareNoiseMapSettings: DiamondSquareNoiseMapSettings = {
   landPercentage: 30,
   landColor: "#285000",
   waterColor: "#3c7fff",
+};
+
+const hoverTexts: Stringified<DiamondSquareNoiseMapSettings> = {
+  seed: "Seed for the random number generator. Changing this will change the map.",
+  size: "The size of the map. The map will be square with this size. Must be a power of 2.",
+  fragmentation: "Higher fragmentation will result in smaller continents and islands.",
+  landPercentage: "The percentage of the map that will be land.",
+  landColor: "The color of the land.",
+  waterColor: "The color of the water.",
 };
 
 function imageDataFromLandMatrix(settings: DiamondSquareNoiseMapSettings) {
@@ -69,35 +78,41 @@ function DiamondSquareNoiseMap() {
       <div id="controls-window">
         <NumberSettingRow
           labelText="Seed"
+          hoverText={hoverTexts.seed}
           value={settings["seed"]}
           changeHandler={changeSetting("seed")}
           validators={[isInRange(0, MAX_SEED)]}
         />
         <NumberSettingRow
           labelText="Size"
+          hoverText={hoverTexts.size}
           value={settings["size"]}
           changeHandler={changeSetting("size")}
           validators={[isPowerOfTwo, isInRange(MIN_SIZE, MAX_SIZE)]}
         />
         <NumberSettingRow
           labelText="Fragmentation"
+          hoverText={hoverTexts.fragmentation}
           value={settings["fragmentation"]}
           changeHandler={changeSetting("fragmentation")}
           validators={[isInRange(MIN_FRAGMENTATION, MAX_FRAGMENTATION)]}
         />
         <NumberSettingRow
           labelText="Land percentage"
+          hoverText={hoverTexts.landPercentage}
           value={settings["landPercentage"]}
           changeHandler={changeSetting("landPercentage")}
           validators={[isInRange(MIN_LAND_PERCENTAGE, MAX_LAND_PERCENTAGE)]}
         />
         <ColorSettingRow
           labelText="Land color"
+          hoverText={hoverTexts.landColor}
           value={settings["landColor"]}
           changeHandler={changeSetting("landColor")}
         />
         <ColorSettingRow
           labelText="Water color"
+          hoverText={hoverTexts.waterColor}
           value={settings["waterColor"]}
           changeHandler={changeSetting("waterColor")}
         />
